@@ -1,0 +1,1266 @@
+{% extends "base.html" %}
+
+{% set show_sidebar = false %}
+{% set full_width = true %}
+{% set active_nav = 'tools' %}
+
+{% block mainbody %}
+
+<style>
+    .tools-page {
+        max-width: 1500px;
+        margin: 0 auto;
+    }
+
+    .tools-hero {
+        text-align: center;
+        padding: 20px 20px 10px;
+    }
+
+    .tools-hero h1 {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: clamp(32px, 4vw, 52px);
+        line-height: 1.15;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        color: #2f3038;
+        margin-bottom: 14px;
+    }
+
+    .tools-hero p {
+        max-width: 850px;
+        margin: 0 auto;
+        font-size: 18px;
+        line-height: 1.6;
+        color: #666873;
+    }
+
+    /* Category Navigation */
+
+    .tool-categories {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 32px 0 40px;
+    }
+
+    .tool-category {
+        padding: 10px 20px;
+        border: 1px solid #d5d7df;
+        border-radius: 999px;
+        background: white;
+        color: #50515a;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .tool-category:hover {
+        border-color: #2563eb;
+        color: #2563eb;
+        transform: translateY(-1px);
+    }
+
+    .tool-category.active {
+        background: #292a31;
+        color: white;
+        border-color: #292a31;
+    }
+
+    /* Section */
+
+    .tools-section {
+        margin-bottom: 55px;
+        scroll-margin-top: 80px;
+    }
+
+    .section-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 18px;
+    }
+
+    .section-title-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .section-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eef2ff;
+        color: #2563eb;
+    }
+
+    .section-icon .material-symbols-outlined {
+        font-size: 23px;
+    }
+
+    .section-title {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 27px;
+        font-weight: 700;
+        color: #303139;
+    }
+
+    .section-description {
+        font-size: 14px;
+        color: #777984;
+        margin-top: 2px;
+    }
+
+    /* Tool Grid */
+
+    .tools-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 20px;
+    }
+
+    .tool-card {
+        background: #ffffff;
+        border: 1px solid #d9dbe3;
+        border-radius: 16px;
+        padding: 28px 24px;
+        min-height: 210px;
+        display: flex;
+        flex-direction: column;
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease,
+            border-color 0.2s ease;
+    }
+
+    .tool-card:hover {
+        transform: translateY(-4px);
+        border-color: #bfc4d2;
+        box-shadow: 0 10px 25px rgba(30, 35, 50, 0.08);
+    }
+
+    .tool-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 22px;
+    }
+
+    .tool-icon .material-symbols-outlined {
+        font-size: 27px;
+    }
+
+    .icon-blue {
+        background: #e6edff;
+        color: #2563eb;
+    }
+
+    .icon-orange {
+        background: #ffebe3;
+        color: #f26345;
+    }
+
+    .icon-green {
+        background: #e8f5dc;
+        color: #70a940;
+    }
+
+    .icon-purple {
+        background: #eee8ff;
+        color: #7356c7;
+    }
+
+    .icon-red {
+        background: #ffe8e8;
+        color: #dc4c4c;
+    }
+
+    .icon-yellow {
+        background: #fff4d8;
+        color: #b88300;
+    }
+
+    .icon-teal {
+        background: #e0f5f3;
+        color: #168a82;
+    }
+
+    .tool-card h3 {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 20px;
+        line-height: 1.3;
+        font-weight: 600;
+        color: #363740;
+        margin-bottom: 8px;
+    }
+
+    .tool-card p {
+        font-size: 14px;
+        line-height: 1.55;
+        color: #777984;
+        margin: 0;
+    }
+
+    .tool-link {
+        margin-top: auto;
+        padding-top: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #2563eb;
+        text-decoration: none;
+    }
+
+    .tool-link:hover {
+        text-decoration: underline;
+    }
+
+    .tool-link .material-symbols-outlined {
+        font-size: 17px;
+    }
+
+    /* Responsive */
+
+    @media (max-width: 1250px) {
+        .tools-grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 1000px) {
+        .tools-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 700px) {
+        .tools-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .tools-hero {
+            padding-top: 10px;
+        }
+
+        .tool-card {
+            padding: 22px 18px;
+        }
+
+        .section-heading {
+            align-items: flex-start;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .tools-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .tools-hero h1 {
+            font-size: 32px;
+        }
+
+        .tools-hero p {
+            font-size: 16px;
+        }
+
+        .tool-categories {
+            justify-content: flex-start;
+            overflow-x: auto;
+            flex-wrap: nowrap;
+            padding-bottom: 5px;
+        }
+
+        .tool-category {
+            white-space: nowrap;
+        }
+    }
+</style>
+
+
+<div class="tools-page">
+
+    <!-- ================= HERO ================= -->
+
+    <section class="tools-hero">
+        <h1>Every tool you need for your CA office</h1>
+
+        <p>
+            Practical tools designed to make your day-to-day tax, GST,
+            accounting and compliance work faster, easier and more efficient.
+            All your essential tools in one place.
+        </p>
+    </section>
+
+
+    <!-- ================= CATEGORY FILTER ================= -->
+
+    <div class="tool-categories">
+
+        <button class="tool-category active" data-target="all">
+            All
+        </button>
+
+        <button class="tool-category" data-target="gst">
+            GST
+        </button>
+
+        <!-- <button class="tool-category" data-target="income-tax">
+            Income Tax
+        </button> -->
+
+        <!-- <button class="tool-category" data-target="pdf">
+            PDF
+        </button> -->
+
+        <!-- <button class="tool-category" data-target="image">
+            Image
+        </button> -->
+
+        <!-- <button class="tool-category" data-target="excel">
+            Excel
+        </button> -->
+
+        <!-- <button class="tool-category" data-target="compliance">
+            Compliance
+        </button> -->
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- GST TOOLS -->
+    <!-- ================================================= -->
+
+    <section class="tools-section" id="gst">
+
+        <div class="section-heading">
+
+            <div class="section-title-wrapper">
+
+                <div class="section-icon">
+                    <span class="material-symbols-outlined">
+                        receipt_long
+                    </span>
+                </div>
+
+                <div>
+                    <div class="section-title">GST Tools</div>
+
+                    <div class="section-description">
+                        Tools for everyday GST calculation and compliance work.
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="tools-grid">
+            <div class="tool-card">
+
+    <div class="tool-icon icon-blue">
+
+        <span class="material-symbols-outlined">
+            merge_type
+        </span>
+    </div>
+
+    <h3>GSTR-2B Merger</h3>
+
+    <p>
+        Merge multiple GSTR-2B files into a single Excel file for
+        convenient reconciliation and further analysis.
+    </p>
+
+    <a href="{{url_for('gstr2bmerger.gstr2bmerger')}}" class="tool-link">
+        Open Tool
+        <span class="material-symbols-outlined">
+            arrow_forward
+        </span>
+    </a>
+
+</div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- INCOME TAX -->
+    <!-- ================================================= -->
+
+    <!-- <section class="tools-section" id="income-tax">
+
+        <div class="section-heading">
+
+            <div class="section-title-wrapper">
+
+                <div class="section-icon">
+                    <span class="material-symbols-outlined">
+                        account_balance_wallet
+                    </span>
+                </div>
+
+                <div>
+                    <div class="section-title">Income Tax Tools</div>
+
+                    <div class="section-description">
+                        Useful utilities for income tax computation and
+                        verification.
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="tools-grid">
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-blue">
+                    <span class="material-symbols-outlined">
+                        calculate
+                    </span>
+                </div>
+
+                <h3>Income Tax Calculator</h3>
+
+                <p>
+                    Estimate income tax liability under the applicable
+                    tax regime.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-purple">
+                    <span class="material-symbols-outlined">
+                        compare_arrows
+                    </span>
+                </div>
+
+                <h3>Tax Regime Comparison</h3>
+
+                <p>
+                    Compare tax liability under different income tax
+                    regimes.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-green">
+                    <span class="material-symbols-outlined">
+                        payments
+                    </span>
+                </div>
+
+                <h3>TDS Calculator</h3>
+
+                <p>
+                    Calculate TDS deductions for common payments and
+                    transactions.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-orange">
+                    <span class="material-symbols-outlined">
+                        receipt_long
+                    </span>
+                </div>
+
+                <h3>Advance Tax Calculator</h3>
+
+                <p>
+                    Estimate advance tax instalments based on projected
+                    tax liability.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-red">
+                    <span class="material-symbols-outlined">
+                        schedule
+                    </span>
+                </div>
+
+                <h3>Interest Calculator</h3>
+
+                <p>
+                    Calculate applicable interest for delays in tax
+                    payment or filing.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+        </div>
+
+    </section> -->
+
+
+    <!-- ================================================= -->
+    <!-- PDF TOOLS -->
+    <!-- ================================================= -->
+
+    <!-- <section class="tools-section" id="pdf">
+
+        <div class="section-heading">
+
+            <div class="section-title-wrapper">
+
+                <div class="section-icon">
+                    <span class="material-symbols-outlined">
+                        picture_as_pdf
+                    </span>
+                </div>
+
+                <div>
+                    <div class="section-title">PDF Tools</div>
+
+                    <div class="section-description">
+                        Everyday PDF utilities for documents, notices,
+                        reports and working papers.
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="tools-grid">
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-orange">
+                    <span class="material-symbols-outlined">
+                        merge_type
+                    </span>
+                </div>
+
+                <h3>Merge PDF</h3>
+
+                <p>
+                    Combine multiple PDF files into a single document in
+                    the required order.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-blue">
+                    <span class="material-symbols-outlined">
+                        content_cut
+                    </span>
+                </div>
+
+                <h3>Split PDF</h3>
+
+                <p>
+                    Extract selected pages or divide a PDF into separate
+                    documents.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-green">
+                    <span class="material-symbols-outlined">
+                        compress
+                    </span>
+                </div>
+
+                <h3>Compress PDF</h3>
+
+                <p>
+                    Reduce PDF file size while keeping documents suitable
+                    for sharing and uploading.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-purple">
+                    <span class="material-symbols-outlined">
+                        description
+                    </span>
+                </div>
+
+                <h3>PDF to Word</h3>
+
+                <p>
+                    Convert PDF documents into editable Word files for
+                    further work.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-red">
+                    <span class="material-symbols-outlined">
+                        lock_open
+                    </span>
+                </div>
+
+                <h3>Unlock PDF</h3>
+
+                <p>
+                    Remove password protection from PDFs when you have
+                    the necessary authorization.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+        </div>
+
+    </section> -->
+
+
+    <!-- ================================================= -->
+    <!-- IMAGE TOOLS -->
+    <!-- ================================================= -->
+
+    <!-- <section class="tools-section" id="image">
+
+        <div class="section-heading">
+
+            <div class="section-title-wrapper">
+
+                <div class="section-icon">
+                    <span class="material-symbols-outlined">
+                        image
+                    </span>
+                </div>
+
+                <div>
+                    <div class="section-title">Image Tools</div>
+
+                    <div class="section-description">
+                        Quickly prepare scanned documents, photographs and
+                        images for office use.
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="tools-grid">
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-purple">
+                    <span class="material-symbols-outlined">
+                        photo_size_select_large
+                    </span>
+                </div>
+
+                <h3>Resize Image</h3>
+
+                <p>
+                    Resize images to the required dimensions for forms,
+                    documents and uploads.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-green">
+                    <span class="material-symbols-outlined">
+                        compress
+                    </span>
+                </div>
+
+                <h3>Compress Image</h3>
+
+                <p>
+                    Reduce image file size for faster uploading and
+                    document sharing.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-blue">
+                    <span class="material-symbols-outlined">
+                        crop
+                    </span>
+                </div>
+
+                <h3>Crop Image</h3>
+
+                <p>
+                    Crop scanned documents and images to remove unwanted
+                    areas.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-orange">
+                    <span class="material-symbols-outlined">
+                        rotate_right
+                    </span>
+                </div>
+
+                <h3>Rotate Image</h3>
+
+                <p>
+                    Correct the orientation of scanned documents and
+                    photographs.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-red">
+                    <span class="material-symbols-outlined">
+                        picture_as_pdf
+                    </span>
+                </div>
+
+                <h3>Image to PDF</h3>
+
+                <p>
+                    Convert one or multiple images into a convenient PDF
+                    document.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+        </div>
+
+    </section> -->
+
+
+    <!-- ================================================= -->
+    <!-- EXCEL TOOLS -->
+    <!-- ================================================= -->
+
+    <!-- <section class="tools-section" id="excel">
+
+        <div class="section-heading">
+
+            <div class="section-title-wrapper">
+
+                <div class="section-icon">
+                    <span class="material-symbols-outlined">
+                        table_chart
+                    </span>
+                </div>
+
+                <div>
+                    <div class="section-title">Excel Tools</div>
+
+                    <div class="section-description">
+                        Utilities for cleaning, converting and working with
+                        accounting data.
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="tools-grid">
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-green">
+                    <span class="material-symbols-outlined">
+                        table_rows
+                    </span>
+                </div>
+
+                <h3>Excel Data Cleaner</h3>
+
+                <p>
+                    Clean and organize Excel data for accounting and
+                    reporting work.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-blue">
+                    <span class="material-symbols-outlined">
+                        transform
+                    </span>
+                </div>
+
+                <h3>Excel to CSV</h3>
+
+                <p>
+                    Convert Excel workbooks into CSV files for system
+                    uploads and data processing.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-orange">
+                    <span class="material-symbols-outlined">
+                        filter_alt
+                    </span>
+                </div>
+
+                <h3>Duplicate Finder</h3>
+
+                <p>
+                    Find duplicate entries in client, invoice and
+                    accounting data.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-purple">
+                    <span class="material-symbols-outlined">
+                        format_list_numbered
+                    </span>
+                </div>
+
+                <h3>Data Formatter</h3>
+
+                <p>
+                    Standardize dates, numbers, names and other commonly
+                    used accounting data.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-teal">
+                    <span class="material-symbols-outlined">
+                        difference
+                    </span>
+                </div>
+
+                <h3>Excel Compare</h3>
+
+                <p>
+                    Compare two Excel files and identify differences
+                    between datasets.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+        </div>
+
+    </section> -->
+
+
+    <!-- ================================================= -->
+    <!-- COMPLIANCE TOOLS -->
+    <!-- ================================================= -->
+
+    <!-- <section class="tools-section" id="compliance">
+
+        <div class="section-heading">
+
+            <div class="section-title-wrapper">
+
+                <div class="section-icon">
+                    <span class="material-symbols-outlined">
+                        task_alt
+                    </span>
+                </div>
+
+                <div>
+                    <div class="section-title">Compliance Tools</div>
+
+                    <div class="section-description">
+                        Small utilities that make routine CA-office
+                        compliance work easier.
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="tools-grid">
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-blue">
+                    <span class="material-symbols-outlined">
+                        event
+                    </span>
+                </div>
+
+                <h3>Compliance Calendar</h3>
+
+                <p>
+                    Keep track of important GST, income tax and other
+                    compliance due dates.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-red">
+                    <span class="material-symbols-outlined">
+                        badge
+                    </span>
+                </div>
+
+                <h3>PAN Validator</h3>
+
+                <p>
+                    Check and validate PAN format before using client
+                    information.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-green">
+                    <span class="material-symbols-outlined">
+                        numbers
+                    </span>
+                </div>
+
+                <h3>GSTIN Validator</h3>
+
+                <p>
+                    Check the structure and validity of a GSTIN entered
+                    during client work.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-orange">
+                    <span class="material-symbols-outlined">
+                        calendar_month
+                    </span>
+                </div>
+
+                <h3>Due Date Calculator</h3>
+
+                <p>
+                    Quickly determine filing and payment deadlines based
+                    on the relevant period.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon icon-purple">
+                    <span class="material-symbols-outlined">
+                        qr_code_2
+                    </span>
+                </div>
+
+                <h3>QR Code Generator</h3>
+
+                <p>
+                    Generate QR codes for documents, links, payment
+                    information and office workflows.
+                </p>
+
+                <a href="#" class="tool-link">
+                    Open Tool
+                    <span class="material-symbols-outlined">
+                        arrow_forward
+                    </span>
+                </a>
+
+            </div>
+
+        </div>
+
+    </section> -->
+
+</div>
+
+
+<!-- ================= CATEGORY FILTER SCRIPT ================= -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const buttons = document.querySelectorAll(".tool-category");
+        const sections = document.querySelectorAll(".tools-section");
+
+        buttons.forEach(button => {
+
+            button.addEventListener("click", function () {
+
+                const target = this.dataset.target;
+
+                buttons.forEach(btn => {
+                    btn.classList.remove("active");
+                });
+
+                this.classList.add("active");
+
+                if (target === "all") {
+
+                    sections.forEach(section => {
+                        section.style.display = "block";
+                    });
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth"
+                    });
+
+                    return;
+                }
+
+                sections.forEach(section => {
+
+                    if (section.id === target) {
+                        section.style.display = "block";
+
+                        section.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start"
+                        });
+
+                    } else {
+                        section.style.display = "none";
+                    }
+
+                });
+
+            });
+
+        });
+
+    });
+</script>
+
+{% endblock %}

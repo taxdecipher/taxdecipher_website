@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <!-- ========== META QUERIES ADDED ========== -->
+  <!-- Primary Meta Tags -->
+  <title>Tax Decipher</title>
+  <meta name="title" content="Decoding Tax Laws, Simplifying Compliance." />
+  <meta name="description"
+    content="Tax Decipher simplifies GST, Income Tax, and other tax laws with clear explanations, practical insights, and easy-to-understand guides for taxpayers and professionals." />
+  <meta name="keywords"
+    content="GST, Income Tax, Indian Tax Laws, GST Explained, Income Tax Explained, GST Compliance, Income Tax Compliance, GST Updates, Tax Compliance India, Tax Laws India" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://taxdecipher.com/" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://taxdecipher.com/" />
+  <meta property="og:title"
+    content="Tax Decipher simplifies GST, Income Tax, and other tax laws with clear explanations, practical insights, and easy-to-understand guides for taxpayers and professionals." />
+  <meta property="og:description"
+    content="Tax Decipher simplifies GST, Income Tax, and other tax laws with clear explanations, practical insights, and easy-to-understand guides for taxpayers and professionals." />
+  <meta property="og:image" content="https://taxdecipher.com/" />
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://taxdecipher.com/" />
+  <meta name="twitter:title"
+    content="Tax Decipher simplifies GST, Income Tax, and other tax laws with clear explanations, practical insights, and easy-to-understand guides for taxpayers and professionals." />
+  <meta name="twitter:description"
+    content="Tax Decipher simplifies GST, Income Tax, and other tax laws with clear explanations, practical insights, and easy-to-understand guides for taxpayers and professionals." />
+  <meta name="twitter:image" content="https://taxdecipher.com/" />
+
+  <!-- Viewport (already present, kept for clarity) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Tailwind + fonts (same as original) -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&family=JetBrains+Mono:wght@400&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Space+Grotesk:wght@100..900&display=swap"
+    rel="stylesheet" />
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container": "#e7eefe",
+            "on-primary": "#ffffff",
+            "surface": "#f9f9ff",
+            "surface-container-low": "#f0f3ff",
+            "on-tertiary-container": "#eff0f2",
+            "surface-container-high": "#e2e8f8",
+            "primary": "#004ac6",
+            "on-primary-container": "#eeefff",
+            "tertiary": "#525557",
+            "surface-dim": "#d3daea",
+            "secondary": "#5c5e66",
+            "tertiary-fixed-dim": "#c5c7c8",
+            "on-error-container": "#93000a",
+            "on-primary-fixed-variant": "#003ea8",
+            "primary-fixed": "#dbe1ff",
+            "primary-container": "#2563eb",
+            "secondary-container": "#e0e2ec",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary-fixed-variant": "#44474e",
+            "outline-variant": "#c3c6d7",
+            "outline": "#737686",
+            "tertiary-fixed": "#e1e2e4",
+            "primary-fixed-dim": "#b4c5ff",
+            "error": "#ba1a1a",
+            "on-background": "#151c27",
+            "on-secondary-fixed": "#191c22",
+            "on-surface": "#151c27",
+            "on-tertiary": "#ffffff",
+            "tertiary-container": "#6b6d6f",
+            "error-container": "#ffdad6",
+            "surface-tint": "#0053db",
+            "on-surface-variant": "#434655",
+            "on-error": "#ffffff",
+            "on-secondary-container": "#62646c",
+            "inverse-surface": "#2a313d",
+            "inverse-on-surface": "#ebf1ff",
+            "surface-bright": "#f9f9ff",
+            "surface-container-highest": "#dce2f3",
+            "inverse-primary": "#b4c5ff",
+            "on-tertiary-fixed": "#191c1e",
+            "secondary-fixed-dim": "#c4c6cf",
+            "on-secondary": "#ffffff",
+            "on-primary-fixed": "#00174b",
+            "on-tertiary-fixed-variant": "#444749",
+            "surface-variant": "#dce2f3",
+            "background": "#f9f9ff",
+            "secondary-fixed": "#e0e2ec"
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            full: "9999px"
+          },
+          spacing: {
+            gutter: "32px",
+            "sidebar-width": "300px",
+            "stack-md": "16px",
+            "navbar-height": "56px",
+            "stack-lg": "32px",
+            "content-max-width": "800px",
+            "stack-sm": "8px"
+          },
+          fontFamily: {
+            "label-md": ["Inter"],
+            "headline-md": ["Space Grotesk"],
+            "display-lg-mobile": ["Space Grotesk"],
+            "body-lg": ["Inter"],
+            "code": ["JetBrains Mono"],
+            "body-md": ["Inter"],
+            "headline-sm": ["Space Grotesk"],
+            "display-lg": ["Space Grotesk"]
+          },
+          fontSize: {
+            "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+            "headline-md": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+            "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "body-lg": ["18px", {"lineHeight": "30px", "fontWeight": "400"}],
+            "code": ["14px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "body-md": ["16px", {"lineHeight": "26px", "fontWeight": "400"}],
+            "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+            "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .code-syntax-keyword {
+      color: #C678DD;
+    }
+
+    .code-syntax-tag {
+      color: #E06C75;
+    }
+
+    .code-syntax-attr {
+      color: #D19A66;
+    }
+
+    .code-syntax-string {
+      color: #98C379;
+    }
+
+    .code-syntax-comment {
+      color: #5C6370;
+      font-style: italic;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #dce2f3;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #c3c6d7;
+    }
+
+    /* extra responsive fine-tune */
+    @media (max-width: 768px) {
+      .sidebar-fixed {
+        position: fixed;
+        left: -300px;
+        transition: left 0.2s ease;
+        z-index: 40;
+        width: 280px;
+        height: calc(100vh - 56px);
+        top: 56px;
+        background: white;
+        border-right: 1px solid var(--outline-variant, #c3c6d7);
+        overflow-y: auto;
+      }
+
+      .sidebar-fixed.open {
+        left: 0;
+      }
+
+      .main-shift {
+        margin-left: 0 !important;
+      }
+
+      .nav-links {
+        display: none !important;
+      }
+
+      .hamburger-btn {
+        display: flex !important;
+      }
+
+      .content-padding {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .hamburger-btn {
+        display: none !important;
+      }
+
+      .sidebar-fixed {
+        position: fixed;
+        left: 0;
+        top: 56px;
+        width: 300px;
+        height: calc(100vh - 56px);
+        border-right: 1px solid var(--outline-variant, #c3c6d7);
+        overflow-y: auto;
+        background: var(--surface-container-lowest, #ffffff);
+        z-index: 30;
+      }
+
+      .main-shift {
+        margin-left: 300px;
+      }
+    }
+
+    /* overlay for mobile */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: 35;
+      top: 56px;
+    }
+
+    .sidebar-overlay.active {
+      display: block;
+    }
+
+    .scrollbar-hide {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+
+</head>
+
+<!-- ========== body ========== -->
+
+<body class="bg-surface text-on-surface font-body-md overflow-hidden">
+
+  <!-- Top Navigation Bar (responsive) -->
+  <header class="fixed top-0 left-0 right-0 w-full h-[56px] z-[100]
+         flex items-center
+         px-4 md:px-gutter
+         bg-inverse-surface
+         border-b border-outline-variant
+         shadow-sm">
+
+    <div class="flex items-center h-full min-w-0">
+
+      <!-- Hamburger -->
+      {% if show_sidebar|default(True) %}
+      <button id="hamburgerBtn" class="hamburger-btn flex-shrink-0 p-2 mr-2 rounded-full
+             hover:bg-white/10 transition-all
+             text-on-primary-container">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+      {% endif %}
+
+      <!-- Logo -->
+      <a href="/" class="flex-shrink-0 flex items-center h-full
+             font-headline-sm text-headline-sm
+             font-bold text-on-primary-container
+             tracking-tight">
+        Tax Decipher
+      </a>
+
+      <!-- Navigation -->
+      <nav class="flex items-center ml-6 md:ml-10 gap-1 md:gap-2
+             h-full overflow-x-auto whitespace-nowrap scrollbar-hide">
+
+        <!-- GST Act -->
+        <!-- <a href="/gstact" class="flex-shrink-0 h-9 px-3 md:px-4 flex items-center rounded-lg
+        {% if active_nav == 'gst' %}
+          bg-primary-fixed/15 text-primary-fixed
+        {% else %}
+          text-on-primary-container/75 hover:text-on-primary-container hover:bg-white/5
+        {% endif %}
+        font-label-md text-label-md transition-all">
+          GST Act
+        </a> -->
+
+        <!-- Articles -->
+        <!-- <a href="/articles" class="flex-shrink-0 h-9 px-3 md:px-4 flex items-center rounded-lg
+        {% if active_nav == 'articles' %}
+          bg-primary-fixed/15 text-primary-fixed
+        {% else %}
+          text-on-primary-container/75 hover:text-on-primary-container hover:bg-white/5
+        {% endif %}
+        font-label-md text-label-md transition-all">
+          Articles
+        </a> -->
+
+        <!-- Tools -->
+        <a href="/tools" class="flex-shrink-0 h-9 px-3 md:px-4 flex items-center rounded-lg
+        {% if active_nav == 'tools' %}
+          bg-primary-fixed/15 text-primary-fixed
+        {% else %}
+          text-on-primary-container/75 hover:text-on-primary-container hover:bg-white/5
+        {% endif %}
+        font-label-md text-label-md transition-all">
+          Tools
+        </a>
+
+        <!-- Calculators -->
+        <!-- <a href="/calculators" class="flex-shrink-0 h-9 px-3 md:px-4 flex items-center rounded-lg
+        {% if active_nav == 'calculators' %}
+          bg-primary-fixed/15 text-primary-fixed
+        {% else %}
+          text-on-primary-container/75 hover:text-on-primary-container hover:bg-white/5
+        {% endif %}
+        font-label-md text-label-md transition-all">
+          Calculators
+        </a> -->
+
+      </nav>
+
+    </div>
+
+  </header>
+
+  <div class="flex pt-[56px] h-screen relative">
+    <!-- Mobile overlay -->
+    {% if show_sidebar|default(True) %}
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+    {% endif %}
+
+    <!-- Sidebar (fixed + responsive) -->
+    {% if show_sidebar|default(True) %}
+    <aside id="sidebar" class="sidebar-fixed flex flex-col py-6 gap-stack-md bg-surface-container-lowest">
+
+      <nav class="flex-grow">
+
+        {% block sidebar %}
+
+        {% endblock %}
+
+      </nav>
+
+    </aside>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main id="mainContent"
+      class="{% if show_sidebar|default(True) %}main-shift{% endif %} flex-grow overflow-y-auto bg-surface-bright w-full">
+      <div
+        class="{% if full_width|default(False) %}w-full{% else %}max-w-[800px] mx-auto{% endif %} px-4 md:px-gutter py-stack-lg flex flex-col gap-stack-lg content-padding">
+
+        {% block mainbody %}
+
+        {% endblock %}
+
+        <!-- Mobile sidebar toggle script -->
+        <script>
+            (function () {
+              const hamburger = document.getElementById('hamburgerBtn');
+              const sidebar = document.getElementById('sidebar');
+              const overlay = document.getElementById('sidebarOverlay');
+              const main = document.getElementById('mainContent');
+
+              function closeSidebar() {
+                if (window.innerWidth <= 768) {
+                  sidebar.classList.remove('open');
+                  overlay.classList.remove('active');
+                }
+              }
+
+              function toggleSidebar() {
+                if (window.innerWidth <= 768) {
+                  sidebar.classList.toggle('open');
+                  overlay.classList.toggle('active');
+                }
+              }
+
+              if (hamburger) {
+                hamburger.addEventListener('click', toggleSidebar);
+              }
+              if (overlay) {
+                overlay.addEventListener('click', closeSidebar);
+              }
+              // close on resize to desktop
+              window.addEventListener('resize', function () {
+                if (window.innerWidth > 768) {
+                  sidebar.classList.remove('open');
+                  overlay.classList.remove('active');
+                }
+              });
+
+              // micro interactions (from original)
+              document.addEventListener('DOMContentLoaded', () => {
+                const links = document.querySelectorAll('aside nav a');
+                links.forEach(link => {
+                  link.addEventListener('mouseenter', () => {
+                    link.style.transform = 'translateX(4px)';
+                  });
+                  link.addEventListener('mouseleave', () => {
+                    link.style.transform = 'translateX(0)';
+                  });
+                });
+
+                const observerOptions = {threshold: 0.1};
+                const observer = new IntersectionObserver((entries) => {
+                  entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                      entry.target.classList.add('opacity-100', 'translate-y-0');
+                      entry.target.classList.remove('opacity-0', 'translate-y-4');
+                    }
+                  });
+                }, observerOptions);
+
+                document.querySelectorAll('section').forEach(section => {
+                  section.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-4');
+                  observer.observe(section);
+                });
+              });
+            })();
+        </script>
+</body>
+
+</html>

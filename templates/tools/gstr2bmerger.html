@@ -1,0 +1,1249 @@
+{% extends "base.html" %}
+
+{% set active_nav = 'tools' %}
+{% set show_sidebar = false %}
+{% set full_width = true %}
+
+{% block mainbody %}
+
+<div class="w-full max-w-5xl mx-auto">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="mb-8">
+
+        <div class="flex items-center gap-3 mb-3">
+
+            <div class="w-12 h-12 rounded-xl
+                        bg-primary-fixed
+                        flex items-center justify-center
+                        text-primary">
+
+                <span class="material-symbols-outlined text-2xl">
+                    merge_type
+                </span>
+
+            </div>
+
+            <div>
+
+                <h1 class="font-headline-sm
+                           text-3xl
+                           font-bold
+                           text-on-surface">
+
+                    GSTR-2B Merger
+
+                </h1>
+
+                <p class="text-sm
+                          text-on-surface-variant
+                          mt-1">
+
+                    GST Tools
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <p class="text-on-surface-variant
+                  text-base
+                  leading-relaxed
+                  max-w-3xl">
+
+            Upload multiple GSTR-2B Excel files and merge them
+            into a single consolidated Excel file.
+
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         UPLOAD CARD
+         ===================================================== -->
+
+    <div class="bg-surface-container-lowest
+                border border-outline-variant
+                rounded-2xl
+                p-6 md:p-8
+                shadow-sm">
+
+
+        <form id="mergeForm"
+              method="POST"
+              action="{{ url_for('gstr2bmerger.start_merge') }}"
+              enctype="multipart/form-data">
+
+
+            <!-- Upload Area -->
+
+            <label for="gstr2bFiles"
+                   class="flex flex-col
+                          items-center
+                          justify-center
+                          min-h-[280px]
+                          w-full
+                          border-2
+                          border-dashed
+                          border-outline-variant
+                          rounded-xl
+                          bg-surface-container-low
+                          hover:bg-surface-container
+                          hover:border-primary
+                          transition-all
+                          cursor-pointer">
+
+
+                <div class="w-16 h-16
+                            rounded-full
+                            bg-primary-fixed
+                            flex items-center
+                            justify-center
+                            text-primary
+                            mb-5">
+
+                    <span class="material-symbols-outlined text-3xl">
+                        upload_file
+                    </span>
+
+                </div>
+
+
+                <h2 class="font-headline-sm
+                           text-xl
+                           font-semibold
+                           text-on-surface">
+
+                    Upload GSTR-2B Files
+
+                </h2>
+
+
+                <p class="mt-2
+                          text-sm
+                          text-on-surface-variant
+                          text-center">
+
+                    Select one or multiple GSTR-2B Excel files
+
+                </p>
+
+
+                <span class="mt-6
+                             px-6
+                             py-3
+                             rounded-lg
+                             bg-primary
+                             text-on-primary
+                             font-label-md">
+
+                    Choose Files
+
+                </span>
+
+
+                <p id="fileName"
+                   class="mt-4
+                          text-sm
+                          text-primary
+                          font-medium
+                          text-center">
+                </p>
+
+
+                <input
+                    id="gstr2bFiles"
+                    name="gstr2bFiles"
+                    type="file"
+                    multiple
+                    accept=".xlsx,.xls"
+                    class="hidden"
+                >
+
+            </label>
+
+
+            <!-- =================================================
+                 FILE LIST
+                 ================================================= -->
+
+            <div id="fileList"
+                 class="hidden mt-6">
+
+
+                <div class="flex
+                            items-center
+                            justify-between
+                            mb-3">
+
+                    <h3 class="font-semibold text-on-surface">
+
+                        Selected Files
+
+                    </h3>
+
+
+                    <span id="fileCount"
+                          class="text-sm
+                                 text-on-surface-variant">
+                    </span>
+
+                </div>
+
+
+                <div id="fileItems"
+                     class="space-y-2">
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 MERGE BUTTON
+                 ================================================= -->
+
+            <div class="flex justify-end mt-6">
+
+                <button
+                    id="mergeButton"
+                    type="submit"
+                    disabled
+                    class="px-6
+                           py-3
+                           rounded-lg
+                           bg-primary
+                           text-on-primary
+                           font-label-md
+                           flex
+                           items-center
+                           gap-2
+                           disabled:opacity-40
+                           disabled:cursor-not-allowed
+                           hover:opacity-90
+                           transition-all"
+                >
+
+                    <span id="mergeIcon"
+                          class="material-symbols-outlined">
+
+                        merge_type
+
+                    </span>
+
+
+                    <span id="mergeText">
+
+                        Merge Files
+
+                    </span>
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- =====================================================
+         INFORMATION
+         ===================================================== -->
+
+    <div class="mt-6
+                p-5
+                rounded-xl
+                bg-surface-container-low
+                border border-outline-variant">
+
+        <div class="flex gap-3">
+
+            <span class="material-symbols-outlined text-primary">
+
+                info
+
+            </span>
+
+
+            <div>
+
+                <h3 class="font-semibold
+                           text-on-surface
+                           mb-1">
+
+                    How it works
+
+                </h3>
+
+
+                <p class="text-sm
+                          text-on-surface-variant
+                          leading-relaxed">
+
+                    Each file is checked for the required GSTR-2B
+                    sheets before merging. The files are then arranged
+                    chronologically using the Financial Year and Tax
+                    Period from the Read me sheet.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ============================================================
+     FULL SCREEN MERGING OVERLAY
+     ============================================================ -->
+
+<div id="mergeOverlay"
+     class="hidden
+            fixed
+            inset-0
+            z-[99999]
+            bg-black/50
+            backdrop-blur-sm
+            flex
+            items-center
+            justify-center">
+
+
+    <div class="bg-surface-container-lowest
+                rounded-2xl
+                shadow-2xl
+                border border-outline-variant
+                p-8
+                w-[90%]
+                max-w-md
+                text-center">
+
+
+        <!-- Spinner -->
+
+        <div class="w-16 h-16
+                    mx-auto
+                    mb-5
+                    rounded-full
+                    bg-primary-fixed
+                    flex
+                    items-center
+                    justify-center
+                    text-primary">
+
+            <span id="overlayIcon"
+                  class="material-symbols-outlined
+                         text-4xl
+                         animate-spin">
+
+                progress_activity
+
+            </span>
+
+        </div>
+
+
+        <h2 class="font-headline-sm
+                   text-xl
+                   font-semibold
+                   text-on-surface">
+
+            Merging Files...
+
+        </h2>
+
+
+        <p id="progressMessage"
+           class="mt-2
+                  text-sm
+                  text-on-surface-variant">
+
+            Preparing files...
+
+        </p>
+
+
+        <!-- Progress percentage -->
+
+        <div class="mt-6">
+
+            <div class="flex
+                        items-center
+                        justify-between
+                        mb-2">
+
+                <span class="text-xs
+                             text-on-surface-variant">
+
+                    Progress
+
+                </span>
+
+
+                <span id="progressPercent"
+                      class="text-sm
+                             font-semibold
+                             text-primary">
+
+                    0%
+
+                </span>
+
+            </div>
+
+
+            <div class="h-2
+                        w-full
+                        rounded-full
+                        bg-surface-container
+                        overflow-hidden">
+
+                <div id="progressBar"
+                     class="h-full
+                            w-0
+                            rounded-full
+                            bg-primary
+                            transition-all
+                            duration-500">
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <p class="mt-5
+                  text-xs
+                  text-on-surface-variant">
+
+            Please don't refresh or close this page.
+
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- ============================================================
+     SHEETJS
+     ============================================================ -->
+
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+
+
+<script>
+
+
+// ============================================================
+// ELEMENTS
+// ============================================================
+
+const fileInput =
+    document.getElementById("gstr2bFiles");
+
+const fileName =
+    document.getElementById("fileName");
+
+const fileList =
+    document.getElementById("fileList");
+
+const fileItems =
+    document.getElementById("fileItems");
+
+const fileCount =
+    document.getElementById("fileCount");
+
+const mergeButton =
+    document.getElementById("mergeButton");
+
+const mergeText =
+    document.getElementById("mergeText");
+
+const mergeIcon =
+    document.getElementById("mergeIcon");
+
+const mergeForm =
+    document.getElementById("mergeForm");
+
+const mergeOverlay =
+    document.getElementById("mergeOverlay");
+
+const progressBar =
+    document.getElementById("progressBar");
+
+const progressPercent =
+    document.getElementById("progressPercent");
+
+const progressMessage =
+    document.getElementById("progressMessage");
+
+
+// ============================================================
+// STATE
+// ============================================================
+
+let selectedFiles = [];
+
+
+// ============================================================
+// REQUIRED SHEETS
+// ============================================================
+
+const requiredSheets = [
+
+    "Read me",
+
+    "B2B",
+
+    "B2BA",
+
+    "B2B-CDNR",
+
+    "B2B-CDNRA"
+
+];
+
+
+// ============================================================
+// NORMALIZE SHEET NAME
+// ============================================================
+
+function normalizeSheetName(name) {
+
+    return String(name)
+
+        .replace(/\u00A0/g, " ")
+
+        .trim()
+
+        .replace(/\s+/g, " ")
+
+        .toLowerCase();
+
+}
+
+
+// ============================================================
+// FILE SELECTION
+// ============================================================
+
+fileInput.addEventListener(
+    "change",
+    async function () {
+
+        const files =
+            Array.from(this.files);
+
+
+        for (const file of files) {
+
+            const duplicate =
+                selectedFiles.some(
+                    item =>
+                        item.file.name === file.name &&
+                        item.file.size === file.size &&
+                        item.file.lastModified ===
+                        file.lastModified
+                );
+
+
+            if (duplicate) {
+                continue;
+            }
+
+
+            const validation =
+                await validateExcelFile(file);
+
+
+            selectedFiles.push({
+
+                file: file,
+
+                valid: validation.valid,
+
+                message: validation.message
+
+            });
+
+        }
+
+
+        updateFileList();
+
+    }
+);
+
+
+// ============================================================
+// VALIDATE FILE
+// ============================================================
+
+async function validateExcelFile(file) {
+
+    try {
+
+        const extension =
+            file.name.toLowerCase();
+
+
+        if (
+            !extension.endsWith(".xlsx") &&
+            !extension.endsWith(".xls")
+        ) {
+
+            return {
+
+                valid: false,
+
+                message: "Invalid file"
+
+            };
+
+        }
+
+
+        const buffer =
+            await file.arrayBuffer();
+
+
+        const workbook =
+            XLSX.read(
+                buffer,
+                {
+                    type: "array"
+                }
+            );
+
+
+        const sheets =
+            workbook.SheetNames.map(
+                normalizeSheetName
+            );
+
+
+        const valid =
+            requiredSheets.every(
+                sheet =>
+                    sheets.includes(
+                        normalizeSheetName(sheet)
+                    )
+            );
+
+
+        if (!valid) {
+
+            return {
+
+                valid: false,
+
+                message: "Invalid file"
+
+            };
+
+        }
+
+
+        return {
+
+            valid: true,
+
+            message: "File is valid"
+
+        };
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        return {
+
+            valid: false,
+
+            message: "Invalid file"
+
+        };
+
+    }
+
+}
+
+
+// ============================================================
+// UPDATE FILE LIST
+// ============================================================
+
+function updateFileList() {
+
+    fileItems.innerHTML = "";
+
+
+    if (selectedFiles.length === 0) {
+
+        fileName.textContent = "";
+
+        fileCount.textContent = "";
+
+        fileList.classList.add("hidden");
+
+        updateInputFiles();
+
+        return;
+
+    }
+
+
+    fileName.textContent =
+        `${selectedFiles.length} file${selectedFiles.length > 1 ? "s" : ""} selected`;
+
+
+    fileCount.textContent =
+        `${selectedFiles.length} file${selectedFiles.length > 1 ? "s" : ""}`;
+
+
+    fileList.classList.remove(
+        "hidden"
+    );
+
+
+    selectedFiles.forEach(
+        (fileData, index) => {
+
+            const file =
+                fileData.file;
+
+
+            const item =
+                document.createElement("div");
+
+
+            item.className =
+                "group flex items-center justify-between gap-3 " +
+                "px-4 py-3 rounded-lg " +
+                "bg-surface-container-lowest " +
+                "border border-outline-variant " +
+                "hover:border-primary/40 transition-all";
+
+
+            const icon =
+                fileData.valid
+                    ? "description"
+                    : "error";
+
+
+            const iconClass =
+                fileData.valid
+                    ? "text-green-600"
+                    : "text-red-600";
+
+
+            const statusClass =
+                fileData.valid
+                    ? "text-green-600"
+                    : "text-red-600";
+
+
+            item.innerHTML = `
+
+                <div class="flex items-center gap-3 min-w-0">
+
+                    <span class="material-symbols-outlined ${iconClass}">
+                        ${icon}
+                    </span>
+
+                    <div class="min-w-0">
+
+                        <div class="flex items-center gap-2">
+
+                            <span
+                                class="text-sm text-on-surface truncate"
+                            >
+                                ${escapeHtml(file.name)}
+                            </span>
+
+                            <span
+                                class="text-xs ${statusClass} font-medium"
+                            >
+                                ${fileData.valid ? "✓ Valid" : "✕ Invalid"}
+                            </span>
+
+                        </div>
+
+                        <div
+                            class="text-xs ${statusClass} mt-1"
+                        >
+                            ${fileData.message}
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="flex items-center gap-3 flex-shrink-0">
+
+                    <span
+                        class="text-xs text-on-surface-variant"
+                    >
+                        ${(file.size / 1024 / 1024).toFixed(2)} MB
+                    </span>
+
+
+                    <button
+                        type="button"
+                        onclick="removeFile(${index})"
+                        title="Remove file"
+                        class="w-8 h-8 rounded-full
+                               flex items-center justify-center
+                               text-on-surface-variant
+                               opacity-0
+                               group-hover:opacity-100
+                               hover:bg-error/10
+                               hover:text-error
+                               transition-all"
+                    >
+
+                        <span class="material-symbols-outlined text-lg">
+                            close
+                        </span>
+
+                    </button>
+
+                </div>
+
+            `;
+
+
+            fileItems.appendChild(
+                item
+            );
+
+        }
+    );
+
+
+    updateInputFiles();
+
+}
+
+
+// ============================================================
+// REMOVE FILE
+// ============================================================
+
+function removeFile(index) {
+
+    selectedFiles.splice(
+        index,
+        1
+    );
+
+    updateFileList();
+
+}
+
+
+// ============================================================
+// UPDATE INPUT
+// ============================================================
+
+function updateInputFiles() {
+
+    const dataTransfer =
+        new DataTransfer();
+
+
+    selectedFiles.forEach(
+        item => {
+
+            dataTransfer.items.add(
+                item.file
+            );
+
+        }
+    );
+
+
+    fileInput.files =
+        dataTransfer.files;
+
+
+    const allValid =
+        selectedFiles.length > 0 &&
+        selectedFiles.every(
+            item => item.valid
+        );
+
+
+    mergeButton.disabled =
+        !allValid;
+
+}
+
+
+// ============================================================
+// SUBMIT
+// ============================================================
+
+mergeForm.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+
+        const allValid =
+            selectedFiles.length > 0 &&
+            selectedFiles.every(
+                item => item.valid
+            );
+
+
+        if (!allValid) {
+
+            return;
+
+        }
+
+
+        // ---------------------------------------------
+        // Lock page
+        // ---------------------------------------------
+
+        mergeButton.disabled = true;
+
+        fileInput.disabled = true;
+
+
+        mergeText.textContent =
+            "Processing...";
+
+
+        mergeIcon.textContent =
+            "progress_activity";
+
+
+        mergeIcon.classList.add(
+            "animate-spin"
+        );
+
+
+        mergeOverlay.classList.remove(
+            "hidden"
+        );
+
+
+        document.body.style.overflow =
+            "hidden";
+
+
+        setProgress(
+            0,
+            "Uploading files..."
+        );
+
+
+        try {
+
+            const formData =
+                new FormData();
+
+
+            selectedFiles.forEach(
+                item => {
+
+                    formData.append(
+                        "gstr2bFiles",
+                        item.file
+                    );
+
+                }
+            );
+
+
+            // -----------------------------------------
+            // Start backend task
+            // -----------------------------------------
+
+            const response =
+                await fetch(
+                    mergeForm.action,
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (!response.ok || !result.success) {
+
+                throw new Error(
+                    result.message ||
+                    "Unable to start merge."
+                );
+
+            }
+
+
+            // -----------------------------------------
+            // Poll progress
+            // -----------------------------------------
+
+            pollProgress(
+                result.task_id
+            );
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            showError(
+                error.message
+            );
+
+        }
+
+    }
+);
+
+
+// ============================================================
+// POLL PROGRESS
+// ============================================================
+
+async function pollProgress(taskId) {
+
+    try {
+
+        const response =
+            await fetch(
+                `/tools/gstr2bmerger/progress/${taskId}`
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok || !result.success) {
+
+            throw new Error(
+                result.message ||
+                "Unable to read merge progress."
+            );
+
+        }
+
+
+        setProgress(
+            result.progress,
+            result.message
+        );
+
+
+        // ---------------------------------------------
+        // Completed
+        // ---------------------------------------------
+
+        if (
+            result.status ===
+            "completed"
+        ) {
+
+            setProgress(
+                100,
+                "Merge completed successfully."
+            );
+
+
+            setTimeout(
+                function () {
+
+                    window.location.href =
+                        `/tools/gstr2bmerger/download-page/${taskId}`;
+
+                },
+                500
+            );
+
+
+            return;
+
+        }
+
+
+        // ---------------------------------------------
+        // Error
+        // ---------------------------------------------
+
+        if (
+            result.status ===
+            "error"
+        ) {
+
+            throw new Error(
+                result.message
+            );
+
+        }
+
+
+        // ---------------------------------------------
+        // Continue polling
+        // ---------------------------------------------
+
+        setTimeout(
+            function () {
+
+                pollProgress(
+                    taskId
+                );
+
+            },
+            500
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showError(
+            error.message
+        );
+
+    }
+
+}
+
+
+// ============================================================
+// PROGRESS UI
+// ============================================================
+
+function setProgress(
+    percentage,
+    message
+) {
+
+    percentage =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                Number(percentage)
+            )
+        );
+
+
+    progressBar.style.width =
+        `${percentage}%`;
+
+
+    progressPercent.textContent =
+        `${percentage}%`;
+
+
+    progressMessage.textContent =
+        message || "Processing...";
+
+}
+
+
+// ============================================================
+// ERROR
+// ============================================================
+
+function showError(message) {
+
+    mergeOverlay.classList.add(
+        "hidden"
+    );
+
+
+    document.body.style.overflow =
+        "";
+
+
+    mergeButton.disabled = false;
+
+    fileInput.disabled = false;
+
+
+    mergeText.textContent =
+        "Merge Files";
+
+
+    mergeIcon.textContent =
+        "merge_type";
+
+
+    mergeIcon.classList.remove(
+        "animate-spin"
+    );
+
+
+    alert(
+        message ||
+        "An error occurred while merging the files."
+    );
+
+}
+
+
+// ============================================================
+// ESCAPE HTML
+// ============================================================
+
+function escapeHtml(value) {
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+</script>
+
+{% endblock %}
