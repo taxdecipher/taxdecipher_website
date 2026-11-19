@@ -1,0 +1,13 @@
+env/
+venv/
+.venv/
+__pycache__/
+*.pyc
+.env
+instance/*
+!instance/.gitkeep
+*.db
+*.db-wal
+*.db-shm
+*.db-journal
+.DS_Store

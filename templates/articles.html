@@ -1,0 +1,37 @@
+{% extends "public_base.html" %}
+{% set page_title = (category ~ ' Articles' if category else 'All Articles') ~ ' | Tax Decipher' %}
+{% set page_desc = 'Browse ' ~ (category ~ ' ' if category else '') ~ 'articles on Income Tax, GST and tax compliance from Tax Decipher.' %}
+{% block content %}
+<section class="page-hero">
+  <div class="wrap">
+    <h1>{{ category or 'All' }} Articles</h1>
+    <p>{{ total }} article{{ '' if total == 1 else 's' }}{% if category %} in {{ category }}{% endif %}{% if q %} matching “{{ q }}”{% endif %}</p>
+    <form class="search-form search-form-left" action="{{ url_for('public.articles') }}" method="get" role="search">
+      {% if category %}<input type="hidden" name="category" value="{{ category }}">{% endif %}
+      <i class="bi bi-search" aria-hidden="true"></i>
+      <input type="search" name="q" value="{{ q }}" maxlength="80" placeholder="Search articles..." aria-label="Search articles">
+      <button type="submit">Search</button>
+    </form>
+  </div>
+</section>
+<section class="section" style="padding-top:8px">
+  <div class="wrap">
+    <div class="pills" aria-label="Filter by category">
+      <a class="pill {{ 'active' if not category }}" href="{{ url_for('public.articles', q=q or None) }}">All</a>
+      {% for c in categories %}
+      <a class="pill {{ 'active' if c == category }}" href="{{ url_for('public.articles', category=c, q=q or None) }}">{{ c }}</a>
+      {% endfor %}
+    </div>
+    {% if posts %}
+      {% for post in posts %}{% include "partials/article_card.html" %}{% endfor %}
+      {% include "partials/pagination.html" %}
+    {% else %}
+      <div class="empty">
+        <i class="bi bi-journal-text" style="font-size:42px;color:#aaa5e9"></i>
+        <h3>No articles found</h3>
+        <p>Nothing has been published in this category yet.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

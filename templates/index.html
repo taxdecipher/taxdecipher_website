@@ -1,0 +1,84 @@
+{% extends "public_base.html" %}
+{% block content %}
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Income Tax &middot; GST &middot; Compliance</span>
+    <h1>Decoding Tax Laws, Simplifying Compliance.</h1>
+    <p>Understand Income Tax, GST and other tax laws through clear explanations and practical insights.</p>
+
+    <form class="search-form" action="{{ url_for('public.index') }}" method="get" role="search">
+      {% if category %}<input type="hidden" name="category" value="{{ category }}">{% endif %}
+      <i class="bi bi-search" aria-hidden="true"></i>
+      <input type="search" name="q" value="{{ q }}" maxlength="80"
+             placeholder="Search articles, e.g. GST return, TDS, ITR..." aria-label="Search articles">
+      <button type="submit">Search</button>
+    </form>
+
+    <div class="hero-actions">
+      <a class="btn-site" href="{{ url_for('public.articles') }}">Browse all articles</a>
+      {% if author %}
+      <a class="btn-site outline" href="{{ url_for('siddharth_public.siddharth_profile') }}">Meet the author</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="pills" aria-label="Browse by category">
+      <a class="pill {{ 'active' if not category }}"
+         href="{{ url_for('public.index', q=q or None) }}">All{% if counts %} ({{ counts.values()|sum }}){% endif %}</a>
+      {% for c in categories %}
+      <a class="pill {{ 'active' if c == category }}"
+         href="{{ url_for('public.index', category=c, q=q or None) }}">{{ c }}{% if counts.get(c) %} ({{ counts.get(c) }}){% endif %}</a>
+      {% endfor %}
+    </div>
+
+    <div class="section-head">
+      <h2>
+        {% if q %}Results for “{{ q }}”{% elif category %}Latest {{ category }} Articles{% else %}Latest Articles{% endif %}
+      </h2>
+      {% if q or category %}
+      <a href="{{ url_for('public.index') }}">Clear filters</a>
+      {% else %}
+      <a href="{{ url_for('public.articles') }}">View all &rarr;</a>
+      {% endif %}
+    </div>
+
+    {% if posts %}
+      {% for post in posts %}{% include "partials/article_card.html" %}{% endfor %}
+      {% include "partials/pagination.html" %}
+    {% else %}
+      <div class="empty">
+        <i class="bi bi-journal-text" style="font-size:42px;color:#aaa5e9"></i>
+        {% if q or category %}
+        <h3>No matching articles</h3>
+        <p>Try a different word or <a href="{{ url_for('public.index') }}">clear the filters</a>.</p>
+        {% else %}
+        <h3>No articles published yet</h3>
+        <p>New articles will appear here soon.</p>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% if author %}
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="author-band">
+      {% if author.photo %}
+      <img src="{{ author.photo }}" alt="{{ author.name }}" width="84" height="84">
+      {% else %}
+      <span class="author-avatar"><i class="bi bi-person"></i></span>
+      {% endif %}
+      <div class="author-text">
+        <strong>Written by {{ author.name }}</strong>
+        <span>{{ author.title }}</span>
+      </div>
+      <a class="btn-site" href="{{ url_for('siddharth_public.siddharth_profile') }}">View profile</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

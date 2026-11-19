@@ -1,0 +1,12 @@
+{# Top-right user chip for every /root/* page: profile picture, name and role. #}
+<div class="admin-user-chip">
+    {% if admin_user and admin_user.photo %}
+    <img class="admin-user-avatar" src="{{ admin_user.photo }}" alt="">
+    {% else %}
+    <span class="admin-user-avatar admin-user-initial">{{ admin_user.initial if admin_user else 'R' }}</span>
+    {% endif %}
+    <span class="admin-user-text">
+        <span class="admin-user-name">{{ admin_user.name if admin_user else (session.get('username') or 'Root') }}</span>
+        <span class="admin-user-role">Root User</span>
+    </span>
+</div>

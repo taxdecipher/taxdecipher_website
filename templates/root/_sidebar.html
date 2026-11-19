@@ -1,0 +1,86 @@
+{# Shared admin sidebar. Include once, right after <body>, on every /root/* page.
+   The active link is worked out from the current URL, so nothing else is needed. #}
+{% set _p = request.path %}
+<aside class="sidebar" id="appSidebar">
+
+    <div class="sidebar-header">
+        <button class="toggle-btn" id="sidebarToggle" type="button" title="Toggle sidebar">
+            <i class="bi bi-list"></i>
+        </button>
+
+        <a href="/root/dashboard" class="brand">
+            <img class="brand-logo" src="{{ url_for('static', filename='image/logo.png') }}" alt="Tax Decipher logo">
+            <span class="brand-text">Tax Decipher</span>
+        </a>
+    </div>
+
+    <div class="sidebar-menu">
+
+        <div class="menu-label">MAIN MENU</div>
+
+        <a href="/root/dashboard" title="Dashboard"
+           class="{{ 'active' if _p.startswith('/root/dashboard') }}">
+            <i class="bi bi-grid"></i>
+            <span class="menu-text">Dashboard</span>
+        </a>
+
+        <a href="/root/write" title="Write Article"
+           class="{{ 'active' if _p.startswith('/root/write') }}">
+            <i class="bi bi-pencil-square"></i>
+            <span class="menu-text">Write Article</span>
+        </a>
+
+        <a href="/root/drafts" title="Drafts"
+           class="{{ 'active' if _p.startswith('/root/drafts') }}">
+            <i class="bi bi-file-earmark-text"></i>
+            <span class="menu-text">Drafts</span>
+        </a>
+
+        <a href="/root/published" title="Published Articles"
+           class="{{ 'active' if _p.startswith('/root/published') }}">
+            <i class="bi bi-check2-circle"></i>
+            <span class="menu-text">Published Articles</span>
+        </a>
+
+        <div class="menu-label">WEBSITE</div>
+
+        <a href="/" target="_blank" rel="noopener" title="Visit Website (stay logged in)">
+            <i class="bi bi-house-door"></i>
+            <span class="menu-text">Visit Website</span>
+        </a>
+
+        <div class="menu-label">ACCOUNT</div>
+
+        <a href="/root/profile" title="My Profile"
+           class="{{ 'active' if _p.startswith('/root/profile') }}">
+            <i class="bi bi-person"></i>
+            <span class="menu-text">My Profile</span>
+        </a>
+
+        <a href="/root/portfolio" title="Portfolio"
+           class="{{ 'active' if _p.startswith('/root/portfolio') }}">
+            <i class="bi bi-images"></i>
+            <span class="menu-text">Portfolio</span>
+        </a>
+
+        <a href="/root/settings" title="Settings"
+           class="{{ 'active' if _p.startswith('/root/settings') }}">
+            <i class="bi bi-gear"></i>
+            <span class="menu-text">Settings</span>
+        </a>
+
+    </div>
+
+    <div class="sidebar-footer">
+        <a href="/logout" title="Logout">
+            <i class="bi bi-box-arrow-left"></i>
+            <span class="footer-text">Logout</span>
+        </a>
+    </div>
+
+</aside>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<button class="sidebar-mobile-btn" id="sidebarMobileBtn" type="button" aria-label="Open menu">
+    <i class="bi bi-list"></i>
+</button>

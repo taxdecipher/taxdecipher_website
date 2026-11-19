@@ -1,0 +1,28 @@
+{% extends "public_base.html" %}
+{% set page_title = 'Privacy Policy | Tax Decipher' %}
+{% set page_desc = 'How Tax Decipher handles information when you visit the website.' %}
+{% block content %}
+<section class="page-hero"><div class="wrap wrap-narrow">
+  <h1>Privacy Policy</h1><p>Last updated: {{ current_year }}</p>
+</div></section>
+<div class="wrap wrap-narrow"><div class="prose">
+  <h2>Overview</h2>
+  <p>Tax Decipher is a publishing website. Visitors can read articles without creating an account, and we do not
+     ask visitors for personal information.</p>
+  <h2>Information we collect</h2>
+  <ul>
+    <li><strong>Server logs:</strong> like most websites, our hosting records technical data such as IP address,
+        browser type and pages requested, used for security and troubleshooting.</li>
+    <li><strong>Cookies:</strong> we use a session cookie only for the site administrator's login. Visitors do not
+        receive tracking or advertising cookies from us.</li>
+  </ul>
+  <h2>Third-party services</h2>
+  <p>This site loads fonts, icons and stylesheets from third-party content delivery networks (Google Fonts and
+     jsDelivr). These providers may receive your IP address when your browser requests those files.</p>
+  <h2>Your choices</h2>
+  <p>You can block or delete cookies in your browser settings. The public site works without them.</p>
+  <h2>Contact</h2>
+  <p>Questions about this policy can be sent via the <a href="{{ url_for('public.contact') }}">contact page</a>.</p>
+  <p style="font-size:13px;color:#747890">If you add analytics, advertising or a contact form later, update this policy to describe them.</p>
+</div></div>
+{% endblock %}

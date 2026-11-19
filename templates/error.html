@@ -1,0 +1,12 @@
+{% extends "public_base.html" %}
+{% block content %}
+<section class="error-page">
+  <div class="wrap">
+    <div class="code">{{ error_code|default(404) }}</div>
+    <h1>{{ error_title|default("Page Not Found") }}</h1>
+    <p>{{ error_message|default("Sorry, the page you are looking for does not exist or may have been moved.") }}</p>
+    <a href="{{ url_for('public.index') }}" class="btn-site">Go to Homepage</a>
+    <a href="{{ url_for('public.articles') }}" class="btn-site outline" style="margin-left:8px">Browse Articles</a>
+  </div>
+</section>
+{% endblock %}

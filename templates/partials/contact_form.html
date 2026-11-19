@@ -1,0 +1,45 @@
+{# Contact form. Include with:  {% set form_next = 'contact' %}{% include "partials/contact_form.html" %}
+   form_next = 'contact' (public /contact page) or 'profile' (/siddharth) #}
+<form method="POST" action="{{ url_for('contact_form.send') }}" class="td-contact-form" novalidate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="next" value="{{ form_next|default('contact') }}">
+
+    {# spam trap - hidden from people #}
+    <div class="hp-field" aria-hidden="true">
+        <label>Leave this field empty
+            <input type="text" name="website_url" tabindex="-1" autocomplete="off">
+        </label>
+    </div>
+
+    <div class="cf-grid">
+        <div class="cf-field">
+            <label for="cf-name-{{ form_next }}">Your Name *</label>
+            <input type="text" id="cf-name-{{ form_next }}" name="name" class="cf-input"
+                   maxlength="100" required autocomplete="name">
+        </div>
+        <div class="cf-field">
+            <label for="cf-email-{{ form_next }}">Your Email *</label>
+            <input type="email" id="cf-email-{{ form_next }}" name="email" class="cf-input"
+                   maxlength="200" required autocomplete="email">
+        </div>
+        <div class="cf-field cf-full">
+            <label for="cf-phone-{{ form_next }}">Mobile Number <span style="font-weight:400;opacity:.7">(optional)</span></label>
+            <input type="tel" id="cf-phone-{{ form_next }}" name="phone" class="cf-input"
+                   maxlength="20" autocomplete="tel" inputmode="tel">
+        </div>
+        <div class="cf-field cf-full">
+            <label for="cf-subject-{{ form_next }}">Subject</label>
+            <input type="text" id="cf-subject-{{ form_next }}" name="subject" class="cf-input" maxlength="150">
+        </div>
+        <div class="cf-field cf-full">
+            <label for="cf-message-{{ form_next }}">Message *</label>
+            <textarea id="cf-message-{{ form_next }}" name="message" class="cf-input" rows="5"
+                      minlength="10" maxlength="3000" required></textarea>
+        </div>
+        <div class="cf-field cf-full">
+            <button type="submit" class="td-contact-btn">
+                Send Message <i class="bi bi-send ms-2"></i>
+            </button>
+        </div>
+    </div>
+</form>

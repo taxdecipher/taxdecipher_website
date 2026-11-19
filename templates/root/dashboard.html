@@ -1,0 +1,360 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Root Dashboard | Tax Decipher</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+          rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        :root {
+            --sidebar-width: 260px;
+            --sidebar-collapsed: 78px;
+            --primary: #5145cd;
+            --sidebar-bg: #171a2b;
+            --body-bg: #f5f6fa;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--body-bg);
+            color: #25283b;
+        }
+
+        /* SIDEBAR */
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        /* COLLAPSED SIDEBAR */
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        /* MAIN CONTENT */
+
+        
+
+        
+
+        /* TOPBAR */
+
+        .topbar {
+            height: 75px;
+            background: white;
+            border-bottom: 1px solid #e9eaf0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+        }
+
+        .page-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .root-profile {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .profile-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #e9e7ff;
+            color: var(--primary);
+            display: grid;
+            place-items: center;
+            font-weight: 700;
+        }
+
+        .profile-name {
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .profile-role {
+            font-size: 10px;
+            color: #9295a7;
+        }
+
+        /* DASHBOARD */
+
+        .dashboard-content {
+            padding: 32px;
+        }
+
+        .welcome-title {
+            font-size: 23px;
+            font-weight: 800;
+        }
+
+        .welcome-subtitle {
+            font-size: 13px;
+            color: #9295a7;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #ececf2;
+            border-radius: 13px;
+            padding: 23px;
+            transition: .25s ease;
+            height: 100%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0,0,0,.06);
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            display: grid;
+            place-items: center;
+            border-radius: 11px;
+            font-size: 21px;
+        }
+
+
+        .draft-icon {
+            background: #fff1d9;
+            color: #e69a24;
+        }
+
+        .published-icon {
+            background: #e2f8eb;
+            color: #24a565;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #85889a;
+            margin-top: 20px;
+        }
+
+        .stat-number {
+            font-size: 30px;
+            font-weight: 800;
+            margin-top: 5px;
+        }
+
+        /* MOBILE */
+
+        
+
+        @media (max-width: 768px) {
+
+            
+
+            
+
+            
+
+            .dashboard-content {
+                padding: 22px 16px;
+            }
+
+            .topbar {
+                padding: 0 16px;
+            }
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+        }
+
+    </style>
+
+    {% include "root/_sidebar_head.html" %}
+</head>
+
+<body>
+
+{% include "root/_sidebar.html" %}
+
+
+<!-- MAIN CONTENT -->
+
+<div class="main-content">
+
+    <!-- TOPBAR -->
+
+    <header class="topbar">
+
+        <div class="d-flex align-items-center gap-3">
+
+            <button class="btn btn-light d-md-none"
+                    id="mobileToggle">
+
+                <i class="bi bi-list fs-5"></i>
+
+            </button>
+
+            <h5 class="page-title">Dashboard</h5>
+
+        </div>
+
+
+        <div class="root-profile">
+            {% include "root/_user_chip.html" %}
+        </div>
+
+    </header>
+
+
+    <!-- DASHBOARD BODY -->
+
+    <main class="dashboard-content">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+
+        <div class="mb-4">
+
+            <h3 class="welcome-title">
+                Welcome back, {{ username|default('Root') }}!
+            </h3>
+
+            <p class="welcome-subtitle">
+                Here's an overview of your content.
+            </p>
+
+        </div>
+
+
+        <!-- STATISTICS -->
+
+        <div class="row g-4">
+
+            <!-- DRAFT POSTS -->
+
+            <div class="col-12 col-md-6">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon draft-icon">
+                        <i class="bi bi-file-earmark-text"></i>
+                    </div>
+
+                    <div class="stat-label">
+                        Drafted Posts
+                    </div>
+
+                    <div class="stat-number">
+                        {{ draft_count|default(0) }}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PUBLISHED POSTS -->
+
+            <div class="col-12 col-md-6">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon published-icon">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+
+                    <div class="stat-label">
+                        Published Posts
+                    </div>
+
+                    <div class="stat-number">
+                        {{ published_count|default(0) }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script src="{{ url_for('static', filename='js/admin-sidebar.js') }}?v=2"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+{
+  "sections": [
+    {
+      "label": "Main Menu",
+      "items": [
+        {
+          "label": "Dashboard",
+          "url": "/root/dashboard",
+          "icon": "bi-grid",
+          "active_prefix": "/root/dashboard"
+        },
+        {
+          "label": "Write Article",
+          "url": "/root/write",
+          "icon": "bi-pencil-square",
+          "active_prefix": "/root/write"
+        },
+        {
+          "label": "Drafts",
+          "url": "/root/drafts",
+          "icon": "bi-file-earmark-text",
+          "active_prefix": "/root/drafts"
+        },
+        {
+          "label": "Published Articles",
+          "url": "/root/published",
+          "icon": "bi-globe",
+          "active_prefix": "/root/published"
+        }
+      ]
+    },
+    {
+      "label": "Account",
+      "items": [
+        {
+          "label": "Profile",
+          "url": "/root/profile",
+          "icon": "bi-person-circle",
+          "active_prefix": "/root/profile"
+        },
+        {
+          "label": "Portfolio",
+          "url": "/root/portfolio",
+          "icon": "bi-images",
+          "active_prefix": "/root/portfolio"
+        },
+        {
+          "label": "Settings",
+          "url": "/root/settings",
+          "icon": "bi-gear",
+          "active_prefix": "/root/settings"
+        },
+        {
+          "label": "Logout",
+          "url": "/logout",
+          "icon": "bi-box-arrow-right"
+        }
+      ]
+    }
+  ]
+}

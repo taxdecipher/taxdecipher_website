@@ -1,0 +1,25 @@
+{% extends "public_base.html" %}
+{% set page_title = 'About | Tax Decipher' %}
+{% set page_desc = 'Tax Decipher explains Income Tax, GST and tax compliance in clear, practical language.' %}
+{% block content %}
+<section class="page-hero"><div class="wrap wrap-narrow">
+  <h1>About Tax Decipher</h1>
+  <p>Tax law, explained in plain language.</p>
+</div></section>
+<div class="wrap wrap-narrow"><div class="prose">
+  <h2>Our purpose</h2>
+  <p>Tax rules can feel complicated, and a missed deadline or a misunderstood provision can be expensive.
+     Tax Decipher publishes clear, practical articles on Income Tax, GST and related compliance topics so
+     that taxpayers, professionals and small businesses can understand what applies to them.</p>
+  <h2>What you will find here</h2>
+  <ul>
+    <li>Step-by-step explanations of Income Tax and GST concepts</li>
+    <li>Compliance guidance, due dates and practical examples</li>
+    <li>Updates that explain what a change in the law means in practice</li>
+  </ul>
+  <h2>Who writes the content</h2>
+  <p>Articles are written and published by <a href="{{ url_for('siddharth_public.siddharth_profile') }}">Siddharth Thakur</a>.
+     Content is for general information; please read our <a href="{{ url_for('public.disclaimer') }}">disclaimer</a>.</p>
+  <p style="margin-top:26px"><a class="btn-site" href="{{ url_for('public.articles') }}">Read the articles</a></p>
+</div></div>
+{% endblock %}

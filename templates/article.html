@@ -1,0 +1,63 @@
+{% extends "public_base.html" %}
+{% set page_title = (post['meta_title'] or post['title']) ~ ' | Tax Decipher' %}
+{% set page_desc = post['meta_description'] or (post['content_html']|excerpt(155)) %}
+{% set page_keywords = post['meta_keywords'] %}
+{% set og_type = 'article' %}
+{% set og_image = (request.url_root.rstrip('/') ~ post['cover_photo']) if post['cover_photo'] and post['cover_photo'].startswith('/') else post['cover_photo'] %}
+
+{% block head_extra %}
+<script type="application/ld+json">
+{{ {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": post['title'],
+  "description": page_desc,
+  "datePublished": post['published_at']|iso_date,
+  "dateModified": (post['updated_at'] or post['published_at'])|iso_date,
+  "mainEntityOfPage": request.base_url,
+  "image": og_image or "",
+  "publisher": {"@type": "Organization", "name": "Tax Decipher"}
+}|tojson }}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="wrap wrap-narrow">
+  <article class="article-box">
+    <a href="{{ url_for('public.articles') }}" class="back-link">&larr; All articles</a>
+    <div class="tag" style="margin-top:22px">
+      <a href="{{ url_for('public.articles', category=post['category']) }}" style="color:inherit">{{ post['category'] or 'General' }}</a>
+    </div>
+    <h1>{{ post['title'] }}</h1>
+    <div class="meta">
+      <span><i class="bi bi-calendar3"></i> <time datetime="{{ post['published_at']|iso_date }}">{{ post['published_at']|nice_date }}</time></span>
+      <span>{{ post['content_html']|reading_time }} min read</span>
+    </div>
+
+    <div class="article-content">{{ post['content_html']|safe }}</div>
+  </article>
+
+  <div class="notice">
+    <strong>Note:</strong> This article is for general information only and is not tax or legal advice.
+    Tax laws change often &mdash; please consult a qualified professional before acting.
+    <a href="{{ url_for('public.disclaimer') }}">Read the disclaimer</a>.
+  </div>
+
+  {% if related %}
+  <section class="related">
+    <div class="section-head"><h2>Keep reading</h2></div>
+    <div class="related-grid">
+      {% for r in related %}
+      <a class="related-card" href="{{ url_for('public.article', slug=r['public_slug']) }}">
+        <img src="{{ r['cover_photo'] or url_for('static', filename='image/logo.png') }}" alt="" loading="lazy" width="300" height="130">
+        <div>
+          <div class="tag" style="margin:0">{{ r['category'] or 'General' }}</div>
+          <h4>{{ r['title'] }}</h4>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+</div>
+{% endblock %}

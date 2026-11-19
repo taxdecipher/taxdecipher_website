@@ -1,0 +1,23 @@
+{% extends "siddharth_list_base.html" %}
+{% block page_title %}Services & Expertise{% endblock %}
+{% block page_desc %}All professional services offered by {{ profile.get('full_name', '') }}.{% endblock %}
+{% block label %}What I Do{% endblock %}
+{% block heading %}Services & Expertise{% endblock %}
+
+{% block body %}
+{% if services %}
+<div class="row g-4 mt-3">
+    {% for item in services %}
+    <div class="col-md-6 col-lg-4">
+        <div class="content-card">
+            <div class="card-icon"><i class="bi bi-briefcase"></i></div>
+            <h4>{{ item.get('title', '') }}</h4>
+            <p>{{ item.get('description', '') }}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="section-description">No services have been added yet.</p>
+{% endif %}
+{% endblock %}

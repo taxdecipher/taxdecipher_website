@@ -1,0 +1,22 @@
+{# One portfolio project card. Needs a variable called `item`. #}
+{% set has_link = item.get('link') %}
+<div class="content-card">
+    {% if item.get('image') %}
+    <img src="{{ item.get('image') }}"
+         class="project-image"
+         alt="{{ item.get('title', 'Project image') }}" loading="lazy">
+    {% endif %}
+
+    {% if item.get('category') %}
+    <div class="section-label">{{ item.get('category') }}</div>
+    {% endif %}
+
+    <h4>{{ item.get('title', '') }}</h4>
+    <p>{{ item.get('description', '') }}</p>
+
+    {% if has_link %}
+    <a class="project-link" href="{{ item.get('link') }}" target="_blank" rel="noopener noreferrer">
+        View project <i class="bi bi-box-arrow-up-right"></i>
+    </a>
+    {% endif %}
+</div>

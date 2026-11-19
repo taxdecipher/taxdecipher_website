@@ -1,0 +1,37 @@
+{% extends "public_base.html" %}
+{% set page_title = 'Contact | Tax Decipher' %}
+{% set page_desc = 'Get in touch with Tax Decipher.' %}
+{% block content %}
+<section class="page-hero"><div class="wrap wrap-narrow">
+  <h1>Contact</h1>
+  <p>Questions, feedback or corrections? We would like to hear from you.</p>
+</div></section>
+<div class="wrap wrap-narrow"><div class="prose">
+  {% if contact_email %}
+  <div class="contact-card">
+    <i class="bi bi-envelope"></i>
+    <div><strong>Email</strong><br><a href="mailto:{{ contact_email }}">{{ contact_email }}</a></div>
+  </div>
+  {% endif %}
+  <div class="contact-card">
+    <i class="bi bi-person-badge"></i>
+    <div><strong>Professional profile</strong><br>
+      <a href="{{ url_for('siddharth_public.siddharth_profile') }}">View Siddharth Thakur's profile and contact details</a></div>
+  </div>
+
+  <h2 id="contact-form" style="font-size:21px;margin:28px 0 14px">Send us a message</h2>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+    <div class="form-flash {{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endwith %}
+  {% set form_next = 'contact' %}
+  {% include "partials/contact_form.html" %}
+
+  <p style="margin-top:18px;color:#747890;font-size:14px">
+    For professional advice or consultation, you can contact me through the details on my
+    <a href="{{ url_for('siddharth_public.siddharth_profile') }}">professional profile</a>.
+    <strong>Disclaimer:</strong> I am not a Chartered Accountant.
+  </p>
+</div></div>
+{% endblock %}

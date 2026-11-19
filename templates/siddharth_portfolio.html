@@ -1,0 +1,19 @@
+{% extends "siddharth_list_base.html" %}
+{% block page_title %}Portfolio{% endblock %}
+{% block page_desc %}Complete portfolio of {{ profile.get('full_name', '') }}.{% endblock %}
+{% block label %}Portfolio{% endblock %}
+{% block heading %}All Work{% endblock %}
+
+{% block body %}
+{% if projects %}
+<div class="row g-4 mt-3">
+    {% for item in projects %}
+    <div class="col-md-6 col-lg-4">
+        {% include "partials/portfolio_card.html" %}
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="section-description">No projects have been added yet.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,930 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Write Article | Tax Decipher</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --sidebar-collapsed: 78px;
+            --primary: #5145cd;
+            --sidebar-bg: #171a2b;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: #f5f6fa;
+            font-family: Inter, sans-serif;
+            color: #24263b;
+        }
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        .topbar {
+            height: 75px;
+            background: white;
+            border-bottom: 1px solid #e9eaf0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+        }
+
+        .page-content {
+            max-width: 1450px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        .page-title {
+            font-size: 23px;
+            font-weight: 700;
+        }
+
+        .content-card {
+            background: white;
+            border: 1px solid #e5e6ed;
+            border-radius: 4px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-control, .form-select {
+            border: 1px solid #dfe1e9;
+            border-radius: 4px;
+            padding: 11px 12px;
+            font-size: 13px;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(81,69,205,.1);
+        }
+
+        #editor {
+            min-height: 400px;
+            font-size: 15px;
+        }
+
+        .ql-toolbar.ql-snow {
+            border-radius: 4px 4px 0 0;
+            border-color: #dfe1e9;
+            background: #fafbff;
+        }
+
+        .ql-container.ql-snow {
+            border-radius: 0 0 4px 4px;
+            border-color: #dfe1e9;
+        }
+
+        /* Article images */
+        #editor img {
+            cursor: pointer;
+            max-width: 100%;
+        }
+
+        #editor img.image-selected {
+            outline: 2px solid var(--primary);
+            outline-offset: 3px;
+        }
+
+        .image-tools {
+            display: none;
+            padding: 13px;
+            border: 1px solid #dfe1e9;
+            border-top: 0;
+            background: #fafbff;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .image-tools.active {
+            display: flex;
+        }
+
+        .image-tools label {
+            font-size: 12px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .image-tools input[type="range"] {
+            width: 130px;
+            accent-color: var(--primary);
+        }
+
+        .image-tools .btn {
+            font-size: 12px;
+            padding: 6px 10px;
+            border-radius: 4px;
+        }
+
+        .image-tools .btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .image-width-value {
+            min-width: 38px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .small-upload {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            border: 1px dashed #bfc2d1;
+            background: #fafbff;
+            padding: 9px 13px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            color: #444;
+        }
+
+        .small-upload:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .cover-preview {
+            display: none;
+            width: 150px;
+            height: 95px;
+            object-fit: cover;
+            border: 1px solid #e5e6ed;
+            margin-top: 12px;
+        }
+
+        .btn-primary-custom {
+            background: var(--primary);
+            color: white;
+            border: 0;
+            border-radius: 4px;
+            padding: 10px 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .btn-primary-custom:hover {
+            background: #4035b0;
+            color: white;
+        }
+
+        .btn-light-custom {
+            background: white;
+            color: #333;
+            border: 1px solid #dfe1e9;
+            border-radius: 4px;
+            padding: 10px 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .seo-count {
+            font-size: 11px;
+            color: #85899b;
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        @media(max-width: 768px) {
+            
+
+            
+
+            
+
+            .page-content { padding: 18px; }
+            .topbar { padding: 0 18px; }
+
+            
+
+            
+
+            
+
+            
+
+            .image-tools input[type="range"] {
+                width: 100px;
+            }
+        }
+    </style>
+    {% include "root/_sidebar_head.html" %}
+</head>
+
+<body>
+
+{% include "root/_sidebar.html" %}
+
+
+<main class="main-content">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+
+    <div class="topbar">
+        <strong>Article Editor</strong>
+        {% include "root/_user_chip.html" %}
+    </div>
+
+    <div class="page-content">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+            <div>
+                <div class="page-title">Write Article</div>
+                <div class="small text-secondary mt-1">
+                    Create and manage your tax articles.
+                </div>
+            </div>
+
+            <a href="/root/drafts" class="btn-light-custom text-decoration-none">
+                <i class="bi bi-arrow-left me-1"></i> Back to Drafts
+            </a>
+        </div>
+
+
+        <form id="articleForm" method="POST" action="/root/write/save"
+              enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <input type="hidden" name="post_id"
+                   value="{{ post.post_id if post else '' }}">
+
+            <input type="hidden" name="content_html" id="contentHtml">
+
+            <input type="hidden" name="cover_photo" id="coverPhotoUrl"
+                   value="{{ post.cover_photo if post and post.cover_photo else '' }}">
+
+            <input type="hidden" name="slug" id="slugHidden">
+
+
+            <!-- ARTICLE DETAILS -->
+            <div class="content-card">
+
+                <div class="section-title">
+                    <i class="bi bi-file-text text-primary me-2"></i>
+                    Article Details
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Article Title *</label>
+
+                    <input type="text" class="form-control"
+                           name="title" id="articleTitle"
+                           placeholder="Enter article title"
+                           value="{{ post.title if post else '' }}"
+                           required>
+                </div>
+
+                <div class="row g-3">
+
+                    <div class="col-md-5">
+                        <label class="form-label">Category *</label>
+
+                        <select name="category" id="category"
+                                class="form-select" required>
+
+                            <option value="">Select Category</option>
+
+                            <option value="Income Tax"
+                                {% if post and post.category == 'Income Tax' %}selected{% endif %}>
+                                Income Tax
+                            </option>
+
+                            <option value="GST"
+                                {% if post and post.category == 'GST' %}selected{% endif %}>
+                                GST
+                            </option>
+
+                            <option value="Any Other"
+                                {% if post and post.category == 'Any Other' %}selected{% endif %}>
+                                Any Other
+                            </option>
+
+                        </select>
+                    </div>
+
+                    <div class="col-md-7">
+                        <label class="form-label">Cover Photo (Optional)</label>
+
+                        <div>
+                            <label for="coverInput" class="small-upload">
+                                <i class="bi bi-image"></i>
+                                <span>Choose Cover Photo</span>
+                            </label>
+
+                            <input type="file" id="coverInput"
+                                   accept="image/jpeg,image/png,image/webp"
+                                   hidden>
+                        </div>
+
+                        <img id="coverPreview" class="cover-preview"
+                             alt="Cover photo preview">
+
+                        <div id="coverStatus" class="small text-secondary mt-1"></div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- CONTENT EDITOR -->
+            <div class="content-card">
+
+                <div class="section-title">
+                    <i class="bi bi-pencil-square text-primary me-2"></i>
+                    Article Content
+                </div>
+
+                <div id="editor"></div>
+
+                <!-- IMAGE CONTROLS -->
+                <div class="image-tools" id="imageTools">
+
+                    <div class="d-flex align-items-center gap-2">
+                        <label for="imageWidth">Width</label>
+
+                        <input type="range" id="imageWidth"
+                               min="10" max="100" value="100">
+
+                        <span class="image-width-value" id="imageWidthValue">100%</span>
+                    </div>
+
+                    <div class="d-flex align-items-center flex-wrap gap-1">
+                        <button type="button" class="btn btn-outline-secondary"
+                                data-image-position="left" title="Align left">
+                            <i class="bi bi-align-start"></i> Left
+                        </button>
+
+                        <button type="button" class="btn btn-outline-secondary"
+                                data-image-position="center" title="Center">
+                            <i class="bi bi-align-center"></i> Center
+                        </button>
+
+                        <button type="button" class="btn btn-outline-secondary"
+                                data-image-position="right" title="Align right">
+                            <i class="bi bi-align-end"></i> Right
+                        </button>
+
+                        <button type="button" class="btn btn-outline-secondary"
+                                data-image-position="wrap-left" title="Wrap text on left">
+                            Wrap Left
+                        </button>
+
+                        <button type="button" class="btn btn-outline-secondary"
+                                data-image-position="wrap-right" title="Wrap text on right">
+                            Wrap Right
+                        </button>
+
+                        <button type="button" class="btn btn-outline-danger"
+                                id="removeImageBtn">
+                            <i class="bi bi-trash"></i> Remove
+                        </button>
+                    </div>
+
+                </div>
+
+                <div class="small text-secondary mt-2">
+                    Select an image to change its width, alignment or text wrapping.
+                </div>
+
+            </div>
+
+
+            <!-- SEO -->
+            <div class="content-card">
+
+                <div class="section-title">
+                    <i class="bi bi-search text-primary me-2"></i>
+                    SEO Settings
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Meta Title</label>
+
+                    <input type="text" class="form-control"
+                           name="meta_title" id="metaTitle"
+                           maxlength="60"
+                           placeholder="SEO title"
+                           value="{{ post.meta_title if post and post.meta_title else '' }}">
+
+                    <div class="seo-count">
+                        <span id="titleCount">0</span>/60 characters
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Meta Description</label>
+
+                    <textarea class="form-control"
+                              name="meta_description"
+                              id="metaDescription"
+                              rows="3" maxlength="160"
+                              placeholder="Short description for search engines">{{ post.meta_description if post and post.meta_description else '' }}</textarea>
+
+                    <div class="seo-count">
+                        <span id="descriptionCount">0</span>/160 characters
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Meta Keywords</label>
+
+                    <input type="text" class="form-control"
+                           name="meta_keywords" id="metaKeywords"
+                           placeholder="Income Tax, GST, Tax Planning"
+                           value="{{ post.meta_keywords if post and post.meta_keywords else '' }}">
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label">URL Slug</label>
+
+                    <input type="text" class="form-control"
+                           id="slugInput"
+                           placeholder="article-url-slug"
+                           value="{{ post.slug if post and post.slug else '' }}"
+                           readonly>
+
+                    <div class="small text-secondary mt-1">
+                        Automatically generated from the article title.
+                        Example: taxdecipher.com/income-tax-return
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- BUTTONS -->
+            <div class="d-flex justify-content-end gap-2 mb-5">
+
+                <button type="button" class="btn-light-custom" id="previewBtn">
+                    <i class="bi bi-eye me-1"></i> Preview
+                </button>
+
+                <button type="submit" class="btn-primary-custom">
+                    <i class="bi bi-save me-1"></i> Save Draft
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</main>
+
+
+<!-- PREVIEW FORM -->
+<form id="previewForm" method="POST" action="/root/preview" target="_blank">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="title" id="previewTitle">
+    <input type="hidden" name="content_html" id="previewContent">
+    <input type="hidden" name="category" id="previewCategory">
+    <input type="hidden" name="cover_photo" id="previewCover">
+    <input type="hidden" name="meta_title" id="previewMetaTitle">
+    <input type="hidden" name="meta_description" id="previewMetaDescription">
+    <input type="hidden" name="meta_keywords" id="previewMetaKeywords">
+    <input type="hidden" name="slug" id="previewSlug">
+</form>
+
+<footer class="site-footer">
+    © {{ now_year }} Tax Decipher. All Rights Reserved.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/admin-sidebar.js') }}?v=2"></script>
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+
+<script>
+
+
+    // QUILL EDITOR
+    const quill = new Quill("#editor", {
+        theme: "snow",
+        placeholder: "Start writing your article...",
+        modules: {
+            toolbar: {
+                container: [
+                    [{ header: [1, 2, 3, 4, false] }],
+                    ["bold", "italic", "underline", "strike"],
+                    [{ color: [] }, { background: [] }],
+                    [{ list: "ordered" }, { list: "bullet" }],
+                    [{ align: [] }],
+                    ["blockquote", "code-block"],
+                    ["link", "image"],
+                    ["clean"]
+                ],
+                handlers: {
+                    image: uploadArticleImage
+                }
+            }
+        }
+    });
+
+
+    // LOAD EXISTING ARTICLE
+    const existingContent = {{ (post.content_html if post else '')|tojson }};
+
+    if (existingContent) {
+        quill.root.innerHTML = existingContent;
+    }
+
+
+    // IMAGE UPLOAD TO SERVER
+    async function uploadImage(file) {
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const response = await fetch("/root/upload-image", {
+            method: "POST",
+            headers: { "X-CSRFToken": "{{ csrf_token() }}" },
+            body: formData,
+            credentials: "same-origin"
+        });
+
+        if (!response.ok) {
+            throw new Error("Image upload failed. Please try again.");
+        }
+
+        const data = await response.json();
+
+        if (!data.url) {
+            throw new Error("Server did not return an image URL.");
+        }
+
+        return data.url;
+    }
+
+
+    // ARTICLE IMAGE UPLOAD
+    function uploadArticleImage() {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = "image/jpeg,image/png,image/webp";
+
+        input.click();
+
+        input.onchange = async function () {
+            const file = input.files[0];
+            if (!file) return;
+
+            try {
+                const url = await uploadImage(file);
+                const range = quill.getSelection(true);
+
+                quill.insertEmbed(range.index, "image", url);
+                quill.setSelection(range.index + 1);
+
+            } catch (error) {
+                alert(error.message);
+            }
+        };
+    }
+
+
+    // IMAGE FORMATTING CONTROLS
+    const imageTools = document.getElementById("imageTools");
+    const imageWidth = document.getElementById("imageWidth");
+    const imageWidthValue = document.getElementById("imageWidthValue");
+
+    let selectedImage = null;
+
+    function selectImage(img) {
+        if (selectedImage) {
+            selectedImage.classList.remove("image-selected");
+        }
+
+        selectedImage = img;
+
+        if (!selectedImage) {
+            imageTools.classList.remove("active");
+            return;
+        }
+
+        selectedImage.classList.add("image-selected");
+        imageTools.classList.add("active");
+
+        const width = selectedImage.dataset.imageWidth ||
+            selectedImage.style.width ||
+            "100%";
+
+        const numericWidth = parseInt(width, 10) || 100;
+
+        imageWidth.value = numericWidth;
+        imageWidthValue.textContent = numericWidth + "%";
+
+        updatePositionButtons();
+    }
+
+
+    function updatePositionButtons() {
+        if (!selectedImage) return;
+
+        const position = selectedImage.dataset.imagePosition || "center";
+
+        document.querySelectorAll("[data-image-position]").forEach(button => {
+            button.classList.toggle(
+                "active",
+                button.dataset.imagePosition === position
+            );
+        });
+    }
+
+
+    function applyImageWidth(width) {
+        if (!selectedImage) return;
+
+        const value = Math.max(10, Math.min(100, Number(width)));
+
+        selectedImage.style.width = value + "%";
+        selectedImage.style.maxWidth = "100%";
+        selectedImage.style.height = "auto";
+        selectedImage.dataset.imageWidth = value;
+
+        imageWidth.value = value;
+        imageWidthValue.textContent = value + "%";
+    }
+
+
+    function applyImagePosition(position) {
+        if (!selectedImage) return;
+
+        selectedImage.dataset.imagePosition = position;
+
+        // Reset previous alignment and wrapping styles.
+        selectedImage.style.display = "";
+        selectedImage.style.float = "none";
+        selectedImage.style.clear = "both";
+        selectedImage.style.margin = "10px 0";
+        selectedImage.style.marginLeft = "";
+        selectedImage.style.marginRight = "";
+
+        if (position === "left") {
+            selectedImage.style.display = "block";
+            selectedImage.style.float = "none";
+            selectedImage.style.marginLeft = "0";
+            selectedImage.style.marginRight = "auto";
+            selectedImage.style.clear = "both";
+        }
+
+        else if (position === "center") {
+            selectedImage.style.display = "block";
+            selectedImage.style.float = "none";
+            selectedImage.style.marginLeft = "auto";
+            selectedImage.style.marginRight = "auto";
+            selectedImage.style.clear = "both";
+        }
+
+        else if (position === "right") {
+            selectedImage.style.display = "block";
+            selectedImage.style.float = "none";
+            selectedImage.style.marginLeft = "auto";
+            selectedImage.style.marginRight = "0";
+            selectedImage.style.clear = "both";
+        }
+
+        else if (position === "wrap-left") {
+            selectedImage.style.display = "inline";
+            selectedImage.style.float = "left";
+            selectedImage.style.margin = "8px 18px 12px 0";
+            selectedImage.style.clear = "none";
+        }
+
+        else if (position === "wrap-right") {
+            selectedImage.style.display = "inline";
+            selectedImage.style.float = "right";
+            selectedImage.style.margin = "8px 0 12px 18px";
+            selectedImage.style.clear = "none";
+        }
+
+        updatePositionButtons();
+    }
+
+
+    // Select image by clicking it in the editor.
+    quill.root.addEventListener("click", function (event) {
+        const img = event.target.closest("img");
+
+        if (img && quill.root.contains(img)) {
+            selectImage(img);
+        } else if (!event.target.closest("#imageTools")) {
+            if (selectedImage) {
+                selectedImage.classList.remove("image-selected");
+            }
+            selectedImage = null;
+            imageTools.classList.remove("active");
+        }
+    });
+
+
+    // Width slider.
+    imageWidth.addEventListener("input", function () {
+        applyImageWidth(this.value);
+    });
+
+
+    // Alignment and wrapping buttons.
+    document.querySelectorAll("[data-image-position]").forEach(button => {
+        button.addEventListener("click", function () {
+            applyImagePosition(this.dataset.imagePosition);
+        });
+    });
+
+
+    // Remove selected image.
+    document.getElementById("removeImageBtn").addEventListener("click", function () {
+        if (!selectedImage) return;
+
+        selectedImage.remove();
+        selectedImage = null;
+        imageTools.classList.remove("active");
+    });
+
+
+    // COVER PHOTO UPLOAD
+    document.getElementById("coverInput").addEventListener("change", async function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        const status = document.getElementById("coverStatus");
+        const preview = document.getElementById("coverPreview");
+
+        status.textContent = "Uploading...";
+
+        try {
+            const url = await uploadImage(file);
+
+            document.getElementById("coverPhotoUrl").value = url;
+            preview.src = url;
+            preview.style.display = "block";
+
+            status.textContent = "Cover photo uploaded.";
+
+        } catch (error) {
+            status.textContent = error.message;
+        }
+    });
+
+
+    // EXISTING COVER PHOTO
+    const existingCover = {{ (post.cover_photo if post and post.cover_photo else '')|tojson }};
+
+    if (existingCover) {
+        document.getElementById("coverPreview").src = existingCover;
+        document.getElementById("coverPreview").style.display = "block";
+    }
+
+
+    // SEO COUNTERS
+    const metaTitle = document.getElementById("metaTitle");
+    const metaDescription = document.getElementById("metaDescription");
+
+    function updateCounters() {
+        document.getElementById("titleCount").textContent = metaTitle.value.length;
+        document.getElementById("descriptionCount").textContent = metaDescription.value.length;
+    }
+
+    metaTitle.addEventListener("input", updateCounters);
+    metaDescription.addEventListener("input", updateCounters);
+    updateCounters();
+
+
+    // AUTOMATIC SLUG GENERATOR
+    const titleInput = document.getElementById("articleTitle");
+    const slugInput = document.getElementById("slugInput");
+
+    function createSlug(value) {
+        return value
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, "-");
+    }
+
+    function updateSlug() {
+        slugInput.value = createSlug(titleInput.value);
+    }
+
+    titleInput.addEventListener("input", updateSlug);
+
+    // Generate slug on page load too.
+    updateSlug();
+
+
+    // GET EXACT EDITOR HTML
+    function getEditorHTML() {
+        // Remove temporary selection outline before saving or previewing.
+        if (selectedImage) {
+            selectedImage.classList.remove("image-selected");
+        }
+
+        // Keep image inline styles and data attributes exactly as edited.
+        return quill.root.innerHTML;
+    }
+
+
+    // SAVE DRAFT
+    document.getElementById("articleForm").addEventListener("submit", function () {
+        document.getElementById("contentHtml").value = getEditorHTML();
+        document.getElementById("slugHidden").value = slugInput.value;
+    });
+
+
+    // PREVIEW
+    document.getElementById("previewBtn").addEventListener("click", function () {
+        if (!titleInput.value.trim()) {
+            alert("Please enter article title.");
+            titleInput.focus();
+            return;
+        }
+
+        // Use the same HTML that is saved in the article.
+        document.getElementById("previewTitle").value = titleInput.value;
+        document.getElementById("previewContent").value = getEditorHTML();
+
+        document.getElementById("previewCategory").value =
+            document.getElementById("category").value;
+
+        document.getElementById("previewCover").value =
+            document.getElementById("coverPhotoUrl").value;
+
+        document.getElementById("previewMetaTitle").value = metaTitle.value;
+        document.getElementById("previewMetaDescription").value = metaDescription.value;
+
+        document.getElementById("previewMetaKeywords").value =
+            document.getElementById("metaKeywords").value;
+
+        document.getElementById("previewSlug").value = slugInput.value;
+
+        document.getElementById("previewForm").submit();
+    });
+</script>
+
+</body>
+</html>

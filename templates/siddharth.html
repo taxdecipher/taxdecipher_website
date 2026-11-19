@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ profile.get('meta_title') or profile.get('full_name', 'Siddharth Thakur') }}</title>
+
+    <meta name="description"
+          content="{{ profile.get('meta_description', '') }}">
+    <meta name="keywords"
+          content="{{ profile.get('meta_keywords', '') }}">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link href="{{ url_for('static', filename='css/siddharth.css') }}?v=1" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+        <a class="brand" href="#home">
+            {{ profile.get('full_name', 'Siddharth Thakur') }}
+            <span>.</span>
+        </a>
+
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <i class="bi bi-list fs-2"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNav">
+            <div class="navbar-nav ms-auto align-items-lg-center">
+                <a class="nav-link" href="#home">Home</a>
+                <a class="nav-link" href="#about">About</a>
+                <a class="nav-link" href="#experience">Experience</a>
+                <a class="nav-link" href="#services">Services</a>
+                <a class="nav-link" href="#projects">Work</a>
+                <a class="nav-link" href="#posts">Posts</a>
+                <a class="nav-link" href="#contact">Contact</a>
+                <a class="nav-link" href="{{ url_for('public.index') }}"><i class="bi bi-house-door me-1"></i>Tax Decipher Home</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+
+<!-- Hero -->
+<section class="hero" id="home">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <div class="hero-label">
+                    {{ profile.get('professional_title', 'Accounting & Tax Professional') }}
+                </div>
+
+                <h1>
+                    Hello, I'm
+                    <span>{{ profile.get('full_name', 'Siddharth Thakur') }}</span>
+                </h1>
+
+                <p class="hero-description">
+                    {{ profile.get('short_intro', '') }}
+                </p>
+
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="#contact" class="btn-primary-custom">
+                        {{ profile.get('hero_button_text', 'Get In Touch') }}
+                        <i class="bi bi-arrow-up-right ms-2"></i>
+                    </a>
+
+                    {% if profile.get('resume') %}
+                    <a href="{{ profile.get('resume') }}"
+                       target="_blank"
+                       class="btn-outline-custom">
+                        Download CV <i class="bi bi-download ms-2"></i>
+                    </a>
+                    {% endif %}
+                </div>
+
+                {% if profile.get('location') %}
+                <p class="mt-4 text-secondary small">
+                    <i class="bi bi-geo-alt me-2"></i>
+                    {{ profile.get('location') }}
+                </p>
+                {% endif %}
+            </div>
+
+            <div class="col-lg-5 text-center">
+                {% if profile.get('profile_photo') %}
+                <img src="{{ profile.get('profile_photo') }}"
+                     class="hero-photo"
+                     alt="{{ profile.get('full_name', 'Profile photo') }}">
+                {% else %}
+                <div class="hero-photo d-flex align-items-center justify-content-center mx-auto">
+                    <i class="bi bi-person text-secondary" style="font-size:100px"></i>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- About -->
+<section class="section" id="about">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-7">
+                <div class="section-label">About Me</div>
+
+                <h2 class="section-heading">
+                    {{ profile.get('about_heading', 'A little about myself') }}
+                </h2>
+
+                <p class="section-description">
+                    {{ profile.get('about_description', '') }}
+                </p>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="about-card">
+                    {% if profile.get('qualification') %}
+                    <div class="info-item">
+                        <small>Qualification</small>
+                        <strong>{{ profile.get('qualification') }}</strong>
+                    </div>
+                    {% endif %}
+
+                    {% if profile.get('company') %}
+                    <div class="info-item">
+                        <small>Organisation</small>
+                        <strong>{{ profile.get('company') }}</strong>
+                    </div>
+                    {% endif %}
+
+                    {% if profile.get('designation') %}
+                    <div class="info-item">
+                        <small>Current Position</small>
+                        <strong>{{ profile.get('designation') }}</strong>
+                    </div>
+                    {% endif %}
+
+                    {% if profile.get('experience_years') %}
+                    <div class="info-item">
+                        <small>Experience</small>
+                        <strong>{{ profile.get('experience_years') }} Years</strong>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Experience -->
+{% if profile.get('experience') %}
+<section class="section section-light" id="experience">
+    <div class="container">
+        <div class="section-label">Career</div>
+        <h2 class="section-heading">Professional Experience</h2>
+
+        <div class="timeline mt-5">
+            {% for job in profile.get('experience', []) %}
+            <div class="timeline-item">
+                <h4>{{ job.get('designation', '') }}</h4>
+
+                <div class="muted">
+                    {{ job.get('company', '') }}
+                    {% if job.get('start') %}
+                    · {{ job.get('start')|month_year }}
+                    {% endif %}
+                    {% if job.get('current') %}
+                    – Present
+                    {% elif job.get('end') %}
+                    – {{ job.get('end')|month_year }}
+                    {% endif %}
+                </div>
+
+                {% if job.get('description') %}
+                <p>{{ job.get('description') }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+
+<!-- Education -->
+{% if profile.get('education') %}
+<section class="section" id="education">
+    <div class="container">
+        <div class="section-label">Academic Background</div>
+        <h2 class="section-heading">Education</h2>
+
+        <div class="row g-4 mt-3">
+            {% for item in profile.get('education', []) %}
+            <div class="col-md-6">
+                <div class="content-card">
+                    <div class="card-icon">
+                        <i class="bi bi-mortarboard"></i>
+                    </div>
+
+                    <h4>{{ item.get('qualification', '') }}</h4>
+                    <p>{{ item.get('institution', '') }}</p>
+
+                    {% if item.get('year') %}
+                    <p class="mt-2">
+                        <strong>{{ item.get('year') }}</strong>
+                    </p>
+                    {% endif %}
+
+                    {% if item.get('status') %}
+                    <span class="badge text-bg-light mt-2">
+                        {{ item.get('status') }}
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+
+<!-- Services -->
+{% if services %}
+<section class="section section-light" id="services">
+    <div class="container">
+        <div class="section-label">What I Do</div>
+        <h2 class="section-heading">Services & Expertise</h2>
+
+        <div class="row g-4 mt-3">
+            {% for item in services %}
+            <div class="col-md-6 col-lg-4">
+                <div class="content-card">
+                    <div class="card-icon">
+                        <i class="bi bi-briefcase"></i>
+                    </div>
+
+                    <h4>{{ item.get('title', '') }}</h4>
+                    <p>{{ item.get('description', '') }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if services_total > preview_limit %}
+        <div class="show-more-wrap">
+            <a href="{{ url_for('siddharth_public.all_services') }}" class="btn-primary-custom">
+                Show more services ({{ services_total }}) <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endif %}
+
+
+<!-- Skills -->
+{% if profile.get('skills') %}
+<section class="section" id="skills">
+    <div class="container">
+        <div class="section-label">My Expertise</div>
+        <h2 class="section-heading">Skills & Tools</h2>
+
+        <div class="mt-4">
+            {% for skill in profile.get('skills', '').replace('\r', '').replace('\n', ',').split(',') %}
+                {% if skill.strip() %}
+                <span class="skill-tag">{{ skill.strip() }}</span>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+
+<!-- Projects -->
+{% if projects %}
+<section class="section section-light" id="projects">
+    <div class="container">
+        <div class="section-label">Portfolio</div>
+        <h2 class="section-heading">Selected Work</h2>
+
+        <div class="row g-4 mt-3">
+            {% for item in projects %}
+            <div class="col-md-6 col-lg-4">
+                {% include "partials/portfolio_card.html" %}
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if projects_total > preview_limit %}
+        <div class="show-more-wrap">
+            <a href="{{ url_for('siddharth_public.all_portfolio') }}" class="btn-primary-custom">
+                Show more work ({{ projects_total }}) <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endif %}
+
+
+<!-- My Posts -->
+{% if posts %}
+<section class="section" id="posts">
+    <div class="container">
+        <div class="section-label">Latest Articles</div>
+        <h2 class="section-heading">My Posts</h2>
+
+        <div class="row g-4 mt-3">
+            {% for post in posts %}
+            <div class="col-md-6 col-lg-4">
+                <a class="card-link" href="{{ url_for('public.article', slug=post['public_slug']) }}">
+                    <div class="content-card">
+                        <img src="{{ post['cover_photo'] or url_for('static', filename='image/logo.png') }}"
+                             class="post-image{% if not post['cover_photo'] %} post-image-default{% endif %}"
+                             alt="{{ post['title'] }}" loading="lazy" decoding="async">
+
+                        <div class="section-label">{{ post['category'] or 'General' }}</div>
+                        <h4>{{ post['title'] }}</h4>
+                        <p>{{ post['content_html']|excerpt(130) }}</p>
+                        <div class="post-meta">
+                            {{ post['published_at']|nice_date }}
+                            &middot; {{ post['content_html']|reading_time }} min read
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="show-more-wrap">
+            <a href="{{ url_for('public.articles') }}" class="btn-outline-custom">
+                View all articles <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+
+<!-- Contact -->
+<section class="section contact-section" id="contact">
+    <div class="container">
+        <div class="section-label text-white-50">Get In Touch</div>
+
+        <h2 class="section-heading">
+            {{ profile.get('contact_heading', 'Let’s Connect') }}
+        </h2>
+
+        <p class="section-description">
+            {{ profile.get('contact_subtitle', 'Have a question or want to discuss an opportunity? Feel free to connect.') }}
+        </p>
+
+        <div class="mt-4">
+            {% if profile.get('email') %}
+            <a class="contact-link"
+               href="mailto:{{ profile.get('email') }}">
+                <i class="bi bi-envelope"></i>
+                {{ profile.get('email') }}
+            </a>
+            {% endif %}
+
+            {% if profile.get('phone') %}
+            <a class="contact-link"
+               href="tel:{{ profile.get('phone') }}">
+                <i class="bi bi-telephone"></i>
+                {{ profile.get('phone') }}
+            </a>
+            {% endif %}
+
+            {% if profile.get('linkedin') %}
+            <a class="contact-link"
+               href="{{ profile.get('linkedin') }}"
+               target="_blank" rel="noopener">
+                <i class="bi bi-linkedin"></i> LinkedIn
+            </a>
+            {% endif %}
+
+            {% if profile.get('instagram') %}
+            <a class="contact-link"
+               href="{{ profile.get('instagram') }}"
+               target="_blank" rel="noopener">
+                <i class="bi bi-instagram"></i> Instagram
+            </a>
+            {% endif %}
+
+            {% if profile.get('website') %}
+            <a class="contact-link"
+               href="{{ profile.get('website') }}"
+               target="_blank" rel="noopener">
+                <i class="bi bi-globe"></i> Website
+            </a>
+            {% endif %}
+        </div>
+
+        <!-- Contact form -->
+        <div class="contact-form-box" id="contact-form">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                <div class="form-flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endwith %}
+
+            {% set form_next = 'profile' %}
+            {% include "partials/contact_form.html" %}
+        </div>
+    </div>
+</section>
+
+
+<footer>
+    <div class="container d-flex flex-wrap justify-content-between gap-2">
+        <span>
+            © {{ current_year }} {{ profile.get('full_name', 'Siddharth Thakur') }}.
+            All rights reserved.
+        </span>
+
+        <span>Designed with care.</span>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

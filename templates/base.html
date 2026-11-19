@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Tax Decipher{% endblock %}</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --sidebar-width: 260px;
+      --sidebar-mini: 78px;
+      --header-height: 70px;
+      --primary: #5145cd;
+      --primary-light: #8176ff;
+      --sidebar-bg: #171a2b;
+      --page-bg: #f5f6fa;
+      --text: #24263b;
+      --muted: #85899b;
+      --border: #e7e8ef;
+      --footer-bg: #263348;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--page-bg);
+      color: var(--text);
+      font-family: Inter, sans-serif;
+      font-size: 14px;
+    }
+    a { text-decoration: none; }
+
+    /* Top navigation */
+    .app-navbar {
+      position: fixed;
+      inset: 0 0 auto 0;
+      height: var(--header-height);
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 26px;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+    }
+    .navbar-left, .navbar-right { display: flex; align-items: center; gap: 16px; min-width: 0; }
+    .navbar-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #202238;
+      font: 700 19px "Space Grotesk", sans-serif;
+      white-space: nowrap;
+    }
+    .brand-mark {
+      display: inline-grid;
+      place-items: center;
+      width: 35px;
+      height: 35px;
+      border-radius: 10px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 17px;
+    }
+    .navbar-toggle {
+      display: inline-grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      color: #45485d;
+      font-size: 22px;
+    }
+    .navbar-toggle:hover { background: #f0efff; color: var(--primary); }
+    .navbar-page-label {
+      padding-left: 17px;
+      border-left: 1px solid var(--border);
+      color: #777b8d;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .user-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #55596d;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .user-chip i { font-size: 18px; color: var(--primary); }
+
+    /* Shared sidebar */
+    .app-sidebar {
+      position: fixed;
+      z-index: 1050;
+      top: var(--header-height);
+      bottom: 0;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      width: var(--sidebar-width);
+      background: var(--sidebar-bg);
+      color: #fff;
+      transition: width .25s ease, transform .25s ease;
+      overflow: hidden;
+    }
+    .sidebar-menu {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 19px 12px 24px;
+      scrollbar-width: none;
+    }
+    .sidebar-menu::-webkit-scrollbar { display: none; }
+    .sidebar-section-label {
+      padding: 12px 12px 9px;
+      color: #777d99;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .sidebar-link {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      min-height: 44px;
+      margin: 3px 0;
+      padding: 10px 12px;
+      border-radius: 7px;
+      color: #aeb2c7;
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: background .18s ease, color .18s ease, transform .18s ease;
+    }
+    .sidebar-link i {
+      flex: 0 0 20px;
+      width: 20px;
+      font-size: 17px;
+      text-align: center;
+    }
+    .sidebar-link:hover {
+      background: rgba(81,69,205,.20);
+      color: #fff;
+      transform: translateX(3px);
+    }
+    .sidebar-link.active {
+      background: rgba(81,69,205,.24);
+      color: #fff;
+    }
+    .sidebar-link.active::before {
+      position: absolute;
+      content: "";
+      left: 0;
+      top: 8px;
+      bottom: 8px;
+      width: 3px;
+      border-radius: 0 4px 4px 0;
+      background: var(--primary-light);
+    }
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      z-index: 1040;
+      inset: var(--header-height) 0 0;
+      background: rgba(13,16,30,.48);
+    }
+
+    /* Main layout */
+    .app-main {
+      min-height: 100vh;
+      margin-left: var(--sidebar-width);
+      padding-top: var(--header-height);
+      transition: margin-left .25s ease;
+    }
+    .page-content {
+      width: 100%;
+      max-width: 1500px;
+      min-height: calc(100vh - var(--header-height) - 180px);
+      margin: 0 auto;
+      padding: 30px;
+    }
+    .page-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 25px;
+    }
+    .page-title {
+      margin: 0;
+      color: #24263b;
+      font-size: 23px;
+      font-weight: 700;
+      letter-spacing: -.4px;
+    }
+    .page-subtitle { margin-top: 5px; color: var(--muted); font-size: 13px; }
+
+    /* Footer inspired by the supplied portfolio reference */
+    .site-footer {
+      margin: 30px 24px 24px;
+      padding: 27px 30px 18px;
+      border-radius: 10px 10px 0 0;
+      background: var(--footer-bg);
+      color: #dce2ed;
+    }
+    .footer-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+    .footer-brand { color: #fff; font: 700 17px "Space Grotesk", sans-serif; }
+    .footer-brand-mark {
+      display: inline-grid;
+      place-items: center;
+      width: 29px;
+      height: 29px;
+      margin-right: 7px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      font-size: 13px;
+    }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 17px; }
+    .footer-links a { color: #cbd2df; font-size: 11px; transition: color .2s; }
+    .footer-links a:hover { color: #b6adff; }
+    .footer-copy { color: #b8c1d0; font-size: 11px; }
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      margin-top: 20px;
+      color: #cbd2df;
+      font-size: 10px;
+    }
+    .footer-bottom i { color: #ff6b83; }
+    .back-to-top {
+      position: fixed;
+      right: 25px;
+      bottom: 24px;
+      z-index: 900;
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 5px 16px rgba(81,69,205,.25);
+      transition: transform .2s, background .2s;
+    }
+    .back-to-top:hover { transform: translateY(-3px); background: #4035b0; }
+
+    /* Persistent collapsed state */
+    body.sidebar-collapsed .app-sidebar { width: var(--sidebar-mini); }
+    body.sidebar-collapsed .app-main { margin-left: var(--sidebar-mini); }
+    body.sidebar-collapsed .sidebar-section-label,
+    body.sidebar-collapsed .sidebar-link span { display: none; }
+    body.sidebar-collapsed .sidebar-link { justify-content: center; padding-inline: 0; }
+    body.sidebar-collapsed .sidebar-link:hover { transform: none; }
+    body.sidebar-collapsed .sidebar-link i { flex-basis: auto; }
+
+    @media (max-width: 768px) {
+      .app-navbar { padding: 0 15px; }
+      .navbar-page-label { display: none; }
+      .app-sidebar {
+        width: min(var(--sidebar-width), 86vw);
+        transform: translateX(-100%);
+      }
+      body.mobile-sidebar-open .app-sidebar { transform: translateX(0); }
+      body.mobile-sidebar-open .sidebar-overlay { display: block; }
+      .app-main, body.sidebar-collapsed .app-main { margin-left: 0; }
+      body.sidebar-collapsed .app-sidebar { width: min(var(--sidebar-width), 86vw); }
+      body.sidebar-collapsed .sidebar-section-label { display: block; }
+      body.sidebar-collapsed .sidebar-link span { display: inline; }
+      body.sidebar-collapsed .sidebar-link { justify-content: flex-start; padding: 10px 12px; }
+      .page-content { padding: 22px 16px; }
+      .site-footer { margin: 20px 12px 12px; padding: 23px 18px 16px; }
+      .footer-top { align-items: flex-start; flex-direction: column; }
+      .footer-links { gap: 13px; }
+      .back-to-top { right: 15px; bottom: 15px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+  {% block head_extra %}{% endblock %}
+</head>
+
+<body>
+  {% if show_navbar|default(True) %}
+  <header class="app-navbar">
+    <div class="navbar-left">
+      {% if show_sidebar|default(True) %}
+      <button class="navbar-toggle" id="sidebarToggle" type="button"
+              aria-label="Toggle sidebar" aria-controls="appSidebar" aria-expanded="true">
+        <i class="bi bi-list"></i>
+      </button>
+      {% endif %}
+      <a class="navbar-brand" href="/">
+        <span class="brand-mark"><i class="bi bi-calculator"></i></span>
+        <span>Tax Decipher</span>
+      </a>
+      <span class="navbar-page-label">{% block navbar_label %}Workspace{% endblock %}</span>
+    </div>
+    <div class="navbar-right">
+      {% if username %}
+      <span class="user-chip"><i class="bi bi-person-circle"></i><span>{{ username }}</span></span>
+      {% endif %}
+      {% block navbar_actions %}{% endblock %}
+    </div>
+  </header>
+  {% endif %}
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  {% if show_sidebar|default(True) %}
+  <aside class="app-sidebar" id="appSidebar" aria-label="Main navigation">
+    <nav class="sidebar-menu" id="sidebarMenu" aria-label="Sidebar menu">
+      {% block sidebar %}
+      <div class="text-white-50 small px-3 py-3">Loading navigation...</div>
+      {% endblock %}
+    </nav>
+  </aside>
+  {% endif %}
+
+  <main class="app-main" id="mainContent">
+    <div class="page-content">
+      {% block mainbody %}{% endblock %}
+    </div>
+
+    {% if show_footer|default(True) %}
+    <footer class="site-footer">
+      <div class="footer-top">
+        <a href="/" class="footer-brand">
+          <span class="footer-brand-mark">T</span>Tax Decipher
+        </a>
+        <nav class="footer-links" aria-label="Footer navigation">
+          <a href="/">Home</a>
+          <a href="{{ url_for('public.articles') }}">Articles</a>
+          <a href="{{ url_for('public.about') }}">About</a>
+          <a href="{{ url_for('public.contact') }}">Contact</a>
+          <a href="{{ url_for('public.privacy_policy') }}">Privacy Policy</a>
+        </nav>
+        <span class="footer-copy">© {{ current_year|default(2026) }} Tax Decipher.</span>
+      </div>
+      <div class="footer-bottom">Made with <i class="bi bi-heart-fill"></i> for better tax understanding</div>
+    </footer>
+    {% endif %}
+  </main>
+
+  {% if show_sidebar|default(True) %}
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <i class="bi bi-chevron-up"></i>
+  </button>
+  {% endif %}
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    (() => {
+      const body = document.body;
+      const sidebar = document.getElementById("appSidebar");
+      const toggle = document.getElementById("sidebarToggle");
+      const overlay = document.getElementById("sidebarOverlay");
+      const menu = document.getElementById("sidebarMenu");
+      const backToTop = document.getElementById("backToTop");
+      const storageKey = "taxDecipherSidebarCollapsed";
+
+      // Restore the desktop collapsed preference on every page.
+      if (window.innerWidth > 768 && localStorage.getItem(storageKey) === "true") {
+        body.classList.add("sidebar-collapsed");
+      }
+
+      function closeMobileSidebar() {
+        body.classList.remove("mobile-sidebar-open");
+        toggle?.setAttribute("aria-expanded", "false");
+      }
+
+      toggle?.addEventListener("click", () => {
+        if (window.innerWidth <= 768) {
+          const opened = body.classList.toggle("mobile-sidebar-open");
+          toggle.setAttribute("aria-expanded", String(opened));
+        } else {
+          const collapsed = body.classList.toggle("sidebar-collapsed");
+          localStorage.setItem(storageKey, String(collapsed));
+          toggle.setAttribute("aria-expanded", String(!collapsed));
+        }
+      });
+
+      overlay?.addEventListener("click", closeMobileSidebar);
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 768) closeMobileSidebar();
+      });
+
+      // Navigation is managed from static/data/sidebar.json.
+      async function loadSidebar() {
+        if (!menu) return;
+        try {
+          const response = await fetch("/static/data/sidebar.json", { cache: "no-cache" });
+          if (!response.ok) throw new Error("Navigation configuration could not be loaded.");
+          const config = await response.json();
+          menu.replaceChildren();
+
+          (config.sections || []).forEach(section => {
+            const label = document.createElement("div");
+            label.className = "sidebar-section-label";
+            label.textContent = section.label || "";
+            menu.appendChild(label);
+
+            (section.items || []).forEach(item => {
+              const link = document.createElement("a");
+              link.className = "sidebar-link";
+              link.href = item.url;
+              const currentPath = window.location.pathname.replace(/\/$/, "") || "/";
+              const itemPath = (item.url || "").replace(/\/$/, "") || "/";
+              if (currentPath === itemPath || (item.active_prefix && currentPath.startsWith(item.active_prefix))) {
+                link.classList.add("active");
+                link.setAttribute("aria-current", "page");
+              }
+              const icon = document.createElement("i");
+              icon.className = "bi " + (item.icon || "bi-circle");
+              icon.setAttribute("aria-hidden", "true");
+              const text = document.createElement("span");
+              text.textContent = item.label || "Untitled";
+              link.append(icon, text);
+              link.addEventListener("click", () => {
+                if (window.innerWidth <= 768) closeMobileSidebar();
+              });
+              menu.appendChild(link);
+            });
+          });
+        } catch (error) {
+          menu.innerHTML = '<div class="text-white-50 small px-3 py-3">Navigation unavailable. Check sidebar.json.</div>';
+          console.error(error);
+        }
+      }
+      loadSidebar();
+
+      backToTop?.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+    })();
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
